@@ -1,0 +1,17 @@
+disabled_rules:
+  - trailing_whitespace  # トレイリングホワイトスペースのルールを無効化
+
+nesting:
+  type_level: 1
+  function_level: 2
+
+todo:
+  severity: warning
+
+line_length:
+  warning: 120
+  error: 200
+
+file_length:
+  warning: 500
+  error: 1000
