@@ -1,52 +1,34 @@
 import SwiftUI
 
 struct ContentView: View {
-    let wallpapers = [
-        Wallpaper(imageName: "wallpaper1", title: "Vocabulary 1", category: "Vocabulary"),
-        Wallpaper(imageName: "wallpaper2", title: "Vocabulary 2", category: "Vocabulary"),
-        Wallpaper(imageName: "wallpaper3", title: "Phrases 1", category: "Phrases"),
-        Wallpaper(imageName: "wallpaper4", title: "Phrases 2", category: "Phrases")
-    ]
 
-    var categories: [String: [Wallpaper]] {
-        Dictionary(grouping: wallpapers, by: { $0.category })
+    @State private var selection: Tab = .featured
+
+    enum Tab {
+        case featured // 特集タブ
+        case list     // リストタブ
     }
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                ForEach(categories.keys.sorted(), id: \.self) { key in
-                    Section(header: Text(key)
-                        .font(.headline)
-                        .padding(.leading, 15)
-                        .padding(.top, 10)) {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack {
-                                    ForEach(categories[key]!) { wallpaper in
-                                        NavigationLink(destination: WallpaperDetailView(wallpaper: wallpaper)) {
-                                            VStack {
-                                                Image(wallpaper.imageName)
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(width: 150, height: 150)
-                                                    .clipped()
-                                                    .cornerRadius(10)
-                                                Text(wallpaper.title)
-                                                    .font(.caption)
-                                                    .padding(.top, 5)
-                                            }
-                                            .padding(.leading, 15)
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(height: 200)
-                        }
+        // TabViewはタブバーを作成し、異なるビューを切り替えるために使用します。
+        TabView(selection: $selection) {
+            // CategoryHomeビューは、特集ランドマークを表示するためのビューです。
+            Home()
+                .tabItem {
+                    Label("Featured", systemImage: "star") // タブに表示されるラベルとアイコン
                 }
-            }
-            .navigationTitle("Study Wall")
+                .tag(Tab.featured) // タブの選択状態を管理するためのタグ
+
+            // LandmarkListビューは、すべてのランドマークをリスト表示するビューです。
+            Favorite()
+                .tabItem {
+                    Label("List", systemImage: "list.bullet") // タブに表示されるラベルとアイコン
+                }
+                .tag(Tab.list) // タブの選択状態を管理するためのタグ
         }
     }
+
+
 }
 
 struct ContentView_Previews: PreviewProvider {

@@ -1,11 +1,12 @@
 import SwiftUI
 
+// 壁紙詳細画面のビュー
 struct WallpaperDetailView: View {
     var wallpaper: Wallpaper
-    
+
     var body: some View {
         VStack {
-            Image(wallpaper.imageName)
+            Image(systemName: wallpaper.imageName) // システム画像を使用
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity)
@@ -17,11 +18,5 @@ struct WallpaperDetailView: View {
         }
         .navigationTitle(wallpaper.title)
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct WallpaperDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        WallpaperDetailView(wallpaper: Wallpaper(imageName: "wallpaper1", title: "Sample", category: "Sample"))
     }
 }
