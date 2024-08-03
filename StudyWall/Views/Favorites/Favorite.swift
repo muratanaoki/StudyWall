@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Favorite: View {
     var body: some View {
-        VStack {Text("dwwwd")}
+        VStack {Text("d")}
     }
 }
 

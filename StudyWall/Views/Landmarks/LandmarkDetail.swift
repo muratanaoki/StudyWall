@@ -1,61 +1,119 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
-
-Abstract:
-A view showing the details for a landmark.
-*/
-
 import SwiftUI
 
 struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
     var landmark: Landmark
+    @State private var selectedImageID: UUID?
+    @Namespace private var namespace
 
     var landmarkIndex: Int {
         modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
     }
 
     var body: some View {
-        @Bindable var modelData = modelData
+        ZStack {
+            ScrollView {
+                CircleImage(image: landmark.image)
 
-        ScrollView {
-            MapView(coordinate: landmark.locationCoordinate)
-                .frame(height: 300)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(landmark.park)
+                        Spacer()
+                        Text(landmark.state)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
-            CircleImage(image: landmark.image)
-                .offset(y: -130)
-                .padding(.bottom, -130)
+                    Divider()
 
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(landmark.name)
-                        .font(.title)
-                    FavoriteButton(isSet: $modelData.landmarks[landmarkIndex].isFavorite)
+                    Text("About \(landmark.name)")
+                        .font(.title2)
+
+                    VStack {
+                        HStack {
+                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                        }
+                        HStack {
+                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                        }
+                    }
                 }
-
-                HStack {
-                    Text(landmark.park)
-                    Spacer()
-                    Text(landmark.state)
-                }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-                Divider()
-
-                Text("About \(landmark.name)")
-                    .font(.title2)
-                Text(landmark.description)
+                .padding()
             }
-            .padding()
+
+            if let selectedImageID = selectedImageID {
+                FullScreenImageView(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
+                    .zIndex(2) // FullScreenImageViewを最前面に配置
+                    .ignoresSafeArea() // Safe Areaを無視してフルスクリーンにする
+            }
         }
         .navigationTitle(landmark.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
+struct ImageThumbnail: View {
+    var image: Image
+    var id: UUID
+    @Binding var selectedImageID: UUID?
+    var namespace: Namespace.ID
+
+    var body: some View {
+        image
+            .resizable()
+            .scaledToFit()
+            .onTapGesture {
+                withAnimation(.spring()) {
+                    selectedImageID = id
+                }
+            }
+            .matchedGeometryEffect(id: id, in: namespace)
+    }
+}
+
+struct FullScreenImageView: View {
+    var image: Image
+    var id: UUID
+    @Binding var selectedImageID: UUID?
+    var namespace: Namespace.ID
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Color.black.opacity(0.5)
+                .ignoresSafeArea() // 背景を半透明にする
+
+            image
+                .resizable()
+                .scaledToFit()
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        selectedImageID = nil
+                    }
+                }
+                .matchedGeometryEffect(id: id, in: namespace)
+
+            Button(action: {
+                withAnimation(.spring()) {
+                    selectedImageID = nil
+                }
+            }) {
+                Image(systemName: "xmark")
+                    .padding()
+                    .background(Color.black.opacity(0.6))
+                    .foregroundColor(.white)
+                    .clipShape(Circle())
+                    .padding()
+            }
+        }
+    }
+}
+
 #Preview {
     let modelData = ModelData()
-    return LandmarkDetail(landmark: modelData.landmarks[0])
-        .environment(modelData)
+    return NavigationView {
+        LandmarkDetail(landmark: modelData.landmarks[0])
+            .environment(modelData)
+    }
 }

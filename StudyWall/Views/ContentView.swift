@@ -27,12 +27,9 @@ struct ContentView: View {
                 .tag(Tab.list) // タブの選択状態を管理するためのタグ
         }
     }
-
-
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    ContentView()
+        .environment(ModelData())
 }

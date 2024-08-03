@@ -15,7 +15,6 @@
 		D7CE93152C5A4B0D00063DE8 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93142C5A4B0D00063DE8 /* Favorite.swift */; };
 		D7CE93192C5A548E00063DE8 /* landmarkData.json in Resources */ = {isa = PBXBuildFile; fileRef = D7CE93182C5A548E00063DE8 /* landmarkData.json */; };
 		D7CE931B2C5A550100063DE8 /* hikeData.json in Resources */ = {isa = PBXBuildFile; fileRef = D7CE931A2C5A550100063DE8 /* hikeData.json */; };
-		D7CE931F2C5A565C00063DE8 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE931E2C5A565C00063DE8 /* Wallpaper.swift */; };
 		D7CE93242C5A56BB00063DE8 /* Hike.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93202C5A56BB00063DE8 /* Hike.swift */; };
 		D7CE93252C5A56BB00063DE8 /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93212C5A56BB00063DE8 /* ModelData.swift */; };
 		D7CE93262C5A56BB00063DE8 /* Landmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93222C5A56BB00063DE8 /* Landmark.swift */; };
@@ -41,6 +40,7 @@
 		D7CE935F2C5B9E1100063DE8 /* LandmarkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE935C2C5B9E1100063DE8 /* LandmarkRow.swift */; };
 		D7CE93602C5B9E1100063DE8 /* LandmarkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE935D2C5B9E1100063DE8 /* LandmarkList.swift */; };
 		D7CE93612C5B9E1100063DE8 /* LandmarkDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE935E2C5B9E1100063DE8 /* LandmarkDetail.swift */; };
+		D7CE93642C5DED4F00063DE8 /* FullScreenImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93632C5DED4F00063DE8 /* FullScreenImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,7 +53,6 @@
 		D7CE93142C5A4B0D00063DE8 /* Favorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		D7CE93182C5A548E00063DE8 /* landmarkData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = landmarkData.json; sourceTree = "<group>"; };
 		D7CE931A2C5A550100063DE8 /* hikeData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hikeData.json; sourceTree = "<group>"; };
-		D7CE931E2C5A565C00063DE8 /* Wallpaper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
 		D7CE93202C5A56BB00063DE8 /* Hike.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hike.swift; sourceTree = "<group>"; };
 		D7CE93212C5A56BB00063DE8 /* ModelData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		D7CE93222C5A56BB00063DE8 /* Landmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Landmark.swift; sourceTree = "<group>"; };
@@ -79,6 +78,8 @@
 		D7CE935C2C5B9E1100063DE8 /* LandmarkRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandmarkRow.swift; sourceTree = "<group>"; };
 		D7CE935D2C5B9E1100063DE8 /* LandmarkList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandmarkList.swift; sourceTree = "<group>"; };
 		D7CE935E2C5B9E1100063DE8 /* LandmarkDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandmarkDetail.swift; sourceTree = "<group>"; };
+		D7CE93632C5DED4F00063DE8 /* FullScreenImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageView.swift; sourceTree = "<group>"; };
+		D7CE93652C5DF6C200063DE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +112,7 @@
 		D7747E6C2C54CEB600FA93D2 /* StudyWall */ = {
 			isa = PBXGroup;
 			children = (
+				D7CE93652C5DF6C200063DE8 /* Info.plist */,
 				D7CE93162C5A52D500063DE8 /* Resources */,
 				D7747E7E2C54CF5200FA93D2 /* Views */,
 				D7747E7B2C54CF2B00FA93D2 /* Models */,
@@ -136,7 +138,6 @@
 				D7CE93222C5A56BB00063DE8 /* Landmark.swift */,
 				D7CE93212C5A56BB00063DE8 /* ModelData.swift */,
 				D7CE93232C5A56BB00063DE8 /* Profile.swift */,
-				D7CE931E2C5A565C00063DE8 /* Wallpaper.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -144,6 +145,7 @@
 		D7747E7E2C54CF5200FA93D2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D7CE93622C5DECE400063DE8 /* WallPapers */,
 				D7CE935B2C5B9DD500063DE8 /* Landmarks */,
 				D7CE933C2C5B98D400063DE8 /* Helpers */,
 				D7CE933B2C5B98BA00063DE8 /* Hikes */,
@@ -235,6 +237,14 @@
 				D7CE935C2C5B9E1100063DE8 /* LandmarkRow.swift */,
 			);
 			path = Landmarks;
+			sourceTree = "<group>";
+		};
+		D7CE93622C5DECE400063DE8 /* WallPapers */ = {
+			isa = PBXGroup;
+			children = (
+				D7CE93632C5DED4F00063DE8 /* FullScreenImageView.swift */,
+			);
+			path = WallPapers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,8 +343,8 @@
 			files = (
 				D7CE93242C5A56BB00063DE8 /* Hike.swift in Sources */,
 				D7CE93552C5B99B700063DE8 /* Badge.swift in Sources */,
-				D7CE931F2C5A565C00063DE8 /* Wallpaper.swift in Sources */,
 				D7CE93382C5B968C00063DE8 /* ProfileHost.swift in Sources */,
+				D7CE93642C5DED4F00063DE8 /* FullScreenImageView.swift in Sources */,
 				D7CE935A2C5B9D9E00063DE8 /* CategoryItem.swift in Sources */,
 				D7CE93512C5B99B700063DE8 /* RotatedBadgeSymbol.swift in Sources */,
 				D7CE93422C5B999D00063DE8 /* FavoriteButton.swift in Sources */,
@@ -498,6 +508,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyWall/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -528,6 +542,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyWall/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
