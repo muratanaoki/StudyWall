@@ -12,45 +12,48 @@ struct LandmarkDetail: View {
 
     var body: some View {
         ZStack {
-            ScrollView {
-                CircleImage(image: landmark.image)
+            NavigationView {
+                ScrollView {
+                    CircleImage(image: landmark.image)
 
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(landmark.park)
-                        Spacer()
-                        Text(landmark.state)
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                    Divider()
-
-                    Text("About \(landmark.name)")
-                        .font(.title2)
-
-                    VStack {
+                    VStack(alignment: .leading) {
                         HStack {
-                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                            Text(landmark.park)
+                            Spacer()
+                            Text(landmark.state)
                         }
-                        HStack {
-                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                            ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                        Divider()
+
+                        Text("About \(landmark.name)")
+                            .font(.title2)
+
+                        VStack {
+                            HStack {
+                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                            }
+                            HStack {
+                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
+                .navigationTitle(landmark.name)
+                .navigationBarTitleDisplayMode(.inline)
             }
+            .zIndex(1) // NavigationViewを下に配置
 
             if let selectedImageID = selectedImageID {
                 FullScreenImageDisplay(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
-                    .zIndex(2)
+                    .zIndex(2) // フルスクリーンビューを上に配置
                     .ignoresSafeArea()
-                    .navigationBarHidden(true)// Safe Areaを無視してフルスクリーンにする
             }
         }
-        .navigationTitle(landmark.name)
     }
 }
 
@@ -87,6 +90,7 @@ struct FullScreenImageDisplay: View {
             image
                 .resizable()
                 .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onTapGesture {
                     withAnimation(.spring()) {
                         selectedImageID = nil
@@ -112,8 +116,6 @@ struct FullScreenImageDisplay: View {
 
 #Preview {
     let modelData = ModelData()
-    return NavigationView {
-        LandmarkDetail(landmark: modelData.landmarks[0])
-            .environment(modelData)
-    }
+    return LandmarkDetail(landmark: modelData.landmarks[0])
+        .environment(modelData)
 }

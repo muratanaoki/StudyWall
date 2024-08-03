@@ -39,7 +39,7 @@ struct Home: View {
                 .listRowInsets(EdgeInsets()) // リスト行のインセットを取り除きます。
             }
             .listStyle(.inset)  // リストのスタイルをインセットスタイルに設定します。
-            .navigationTitle("Featured") // ナビゲーションバーのタイトルを「Featured」に設定します。
+            .navigationTitle("test") // ナビゲーションバーのタイトルを「Featured」に設定します。
 
             // ナビゲーションバーの右側にプロフィール表示ボタンを追加します。
             .toolbar {
