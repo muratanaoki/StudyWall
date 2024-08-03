@@ -41,6 +41,7 @@
 		D7CE93602C5B9E1100063DE8 /* LandmarkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE935D2C5B9E1100063DE8 /* LandmarkList.swift */; };
 		D7CE93612C5B9E1100063DE8 /* LandmarkDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE935E2C5B9E1100063DE8 /* LandmarkDetail.swift */; };
 		D7CE93642C5DED4F00063DE8 /* FullScreenImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93632C5DED4F00063DE8 /* FullScreenImageView.swift */; };
+		D7CE93672C5E32D400063DE8 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CE93662C5E32D400063DE8 /* Test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		D7CE935E2C5B9E1100063DE8 /* LandmarkDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandmarkDetail.swift; sourceTree = "<group>"; };
 		D7CE93632C5DED4F00063DE8 /* FullScreenImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageView.swift; sourceTree = "<group>"; };
 		D7CE93652C5DF6C200063DE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D7CE93662C5E32D400063DE8 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				D7CE93132C5A4AF100063DE8 /* Favorites */,
 				D7CE93102C5A49C000063DE8 /* Homes */,
 				D7747E7F2C54CF6100FA93D2 /* ContentView.swift */,
+				D7CE93662C5E32D400063DE8 /* Test.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				D7CE93512C5B99B700063DE8 /* RotatedBadgeSymbol.swift in Sources */,
 				D7CE93422C5B999D00063DE8 /* FavoriteButton.swift in Sources */,
 				D7CE93602C5B9E1100063DE8 /* LandmarkList.swift in Sources */,
+				D7CE93672C5E32D400063DE8 /* Test.swift in Sources */,
 				D7CE93592C5B9D9E00063DE8 /* CategoryRow.swift in Sources */,
 				D7CE93412C5B999D00063DE8 /* CircleImage.swift in Sources */,
 				D7CE93272C5A56BB00063DE8 /* Profile.swift in Sources */,

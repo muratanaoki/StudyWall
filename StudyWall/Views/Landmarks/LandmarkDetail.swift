@@ -44,13 +44,13 @@ struct LandmarkDetail: View {
             }
 
             if let selectedImageID = selectedImageID {
-                FullScreenImageView(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
-                    .zIndex(2) // FullScreenImageViewを最前面に配置
-                    .ignoresSafeArea() // Safe Areaを無視してフルスクリーンにする
+                FullScreenImageDisplay(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
+                    .zIndex(2)
+                    .ignoresSafeArea()
+                    .navigationBarHidden(true)// Safe Areaを無視してフルスクリーンにする
             }
         }
         .navigationTitle(landmark.name)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -73,7 +73,7 @@ struct ImageThumbnail: View {
     }
 }
 
-struct FullScreenImageView: View {
+struct FullScreenImageDisplay: View {
     var image: Image
     var id: UUID
     @Binding var selectedImageID: UUID?
@@ -82,7 +82,7 @@ struct FullScreenImageView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Color.black.opacity(0.5)
-                .ignoresSafeArea() // 背景を半透明にする
+                .ignoresSafeArea()
 
             image
                 .resizable()
