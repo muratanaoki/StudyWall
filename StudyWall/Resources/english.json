@@ -1,0 +1,77 @@
+[
+  {
+    "word": "Strategy",
+    "translation": "戦略",
+    "pronunciation": "[ˈstrætədʒi]",
+    "sentences": [
+      {
+        "english": "Our strategy focuses on innovation.",
+        "japanese": "私たちの戦略はイノベーションに焦点を当てています。"
+      },
+      {
+        "english": "They developed a new marketing strategy.",
+        "japanese": "彼らは新しいマーケティング戦略を開発しました。"
+      }
+    ]
+  },
+  {
+    "word": "Analysis",
+    "translation": "分析",
+    "pronunciation": "[əˈnæləsɪs]",
+    "sentences": [
+      {
+        "english": "The analysis revealed key trends in the market.",
+        "japanese": "分析により市場の主要なトレンドが明らかになりました。"
+      },
+      {
+        "english": "Data analysis is crucial for decision-making.",
+        "japanese": "データ分析は意思決定において重要です。"
+      }
+    ]
+  },
+  {
+    "word": "Implementation",
+    "translation": "実装, 実行",
+    "pronunciation": "[ˌɪmplɪmenˈteɪʃn]",
+    "sentences": [
+      {
+        "english": "The implementation of the new system will take time.",
+        "japanese": "新しいシステムの実装には時間がかかります。"
+      },
+      {
+        "english": "We are in the implementation phase of the project.",
+        "japanese": "プロジェクトの実装段階にあります。"
+      }
+    ]
+  },
+  {
+    "word": "Objective",
+    "translation": "目標, 目的",
+    "pronunciation": "[əbˈdʒektɪv]",
+    "sentences": [
+      {
+        "english": "Our main objective is to increase sales.",
+        "japanese": "私たちの主な目的は売上を増やすことです。"
+      },
+      {
+        "english": "The objectives of the project were clearly defined.",
+        "japanese": "プロジェクトの目的は明確に定義されていました。"
+      }
+    ]
+  },
+  {
+    "word": "Resource",
+    "translation": "資源, リソース",
+    "pronunciation": "[ˈriːsɔːrs]",
+    "sentences": [
+      {
+        "english": "We need to allocate resources effectively.",
+        "japanese": "資源を効果的に配分する必要があります。"
+      },
+      {
+        "english": "The company has limited resources for the project.",
+        "japanese": "会社はプロジェクトに対して限られたリソースを持っています。"
+      }
+    ]
+  }
+]

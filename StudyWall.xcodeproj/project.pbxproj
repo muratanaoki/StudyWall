@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D76C58002C5F965800C20C6C /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = D76C57FF2C5F965800C20C6C /* english.json */; };
 		D7747E6E2C54CEB600FA93D2 /* StudyWallApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7747E6D2C54CEB600FA93D2 /* StudyWallApp.swift */; };
 		D7747E722C54CEB700FA93D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7747E712C54CEB700FA93D2 /* Assets.xcassets */; };
 		D7747E752C54CEB700FA93D2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7747E742C54CEB700FA93D2 /* Preview Assets.xcassets */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D76C57FF2C5F965800C20C6C /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		D7747E6A2C54CEB600FA93D2 /* StudyWall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyWall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7747E6D2C54CEB600FA93D2 /* StudyWallApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyWallApp.swift; sourceTree = "<group>"; };
 		D7747E712C54CEB700FA93D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			children = (
 				D7CE93182C5A548E00063DE8 /* landmarkData.json */,
 				D7CE931A2C5A550100063DE8 /* hikeData.json */,
+				D76C57FF2C5F965800C20C6C /* english.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				D7747E752C54CEB700FA93D2 /* Preview Assets.xcassets in Resources */,
 				D7CE93192C5A548E00063DE8 /* landmarkData.json in Resources */,
 				D7747E722C54CEB700FA93D2 /* Assets.xcassets in Resources */,
+				D76C58002C5F965800C20C6C /* english.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
