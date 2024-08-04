@@ -4,6 +4,7 @@ struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
     var landmark: Landmark
     @State private var selectedImageItem: ImageItem? = nil
+    @State private var selectedIndex = 0
     @Namespace private var namespace
 
     // 表示する画像のリスト
@@ -35,74 +36,77 @@ struct LandmarkDetail: View {
                     // 2列のグリッドで画像を表示
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(0..<images.count, id: \.self) { index in
-                            ImageThumbnail(image: Image(images[index]), selectedImageItem: $selectedImageItem, namespace: namespace)
+                            ImageThumbnail(imageName: images[index], index: index, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
                         }
                     }
-
                 }
                 .padding()
             }
             .navigationTitle(landmark.name)
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedImageItem) { imageItem in
-                FullScreenImageDisplay(image: imageItem.image, selectedImageItem: $selectedImageItem, namespace: namespace)
+                FullScreenSlideView(images: images, currentIndex: $selectedIndex, isFullScreen: $selectedImageItem)
             }
         }
     }
 }
 
 struct ImageThumbnail: View {
-    var image: Image
-    @Binding var selectedImageItem: ImageItem?
-    var namespace: Namespace.ID
+    var imageName: String
+    var index: Int
+    @Binding var selectedIndex: Int
+    @Binding var isFullScreen: ImageItem?
 
     var body: some View {
-        image
+        Image(imageName)
             .resizable()
             .scaledToFit()
             .cornerRadius(10)
             .shadow(radius: 5)
-            .matchedGeometryEffect(id: UUID(), in: namespace)
             .onTapGesture {
                 withAnimation(.spring()) {
-                    selectedImageItem = ImageItem(id: UUID(), image: image)
+                    selectedIndex = index
+                    isFullScreen = ImageItem(id: UUID(), imageName: imageName)
                 }
             }
     }
 }
 
-struct FullScreenImageDisplay: View {
-    var image: Image
-    @Binding var selectedImageItem: ImageItem?
-    var namespace: Namespace.ID
+struct FullScreenSlideView: View {
+    let images: [String]
+    @Binding var currentIndex: Int
+    @Binding var isFullScreen: ImageItem?
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            image
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-                .matchedGeometryEffect(id: UUID(), in: namespace)
-
-            Button(action: {
-                withAnimation(.spring()) {
-                    selectedImageItem = nil
-                }
-            }) {
-                Image(systemName: "xmark")
-                    .padding()
-                    .background(Color.black.opacity(0.6))
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
-                    .padding()
+        TabView(selection: $currentIndex) {
+            ForEach(0..<images.count, id: \.self) { index in
+                Image(images[index])
+                    .resizable()
+                    .scaledToFill()
+                    .tag(index)
+                    .ignoresSafeArea()
             }
         }
+        .tabViewStyle(PageTabViewStyle())
+        .ignoresSafeArea()
+        .overlay(
+            Button(action: {
+                isFullScreen = nil
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.largeTitle)
+                    .padding()
+            }
+            .foregroundColor(.white)
+            .padding(),
+            alignment: .topTrailing
+        )
     }
 }
 
 struct ImageItem: Identifiable {
     let id: UUID
-    let image: Image
+    let imageName: String
 }
 
 struct LandmarkDetail_Previews: PreviewProvider {
