@@ -3,7 +3,7 @@ import SwiftUI
 struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
     var landmark: Landmark
-    @State private var selectedImageID: UUID?
+    @State private var selectedImageItem: ImageItem? = nil
     @Namespace private var namespace
 
     var landmarkIndex: Int {
@@ -11,47 +11,41 @@ struct LandmarkDetail: View {
     }
 
     var body: some View {
-        ZStack {
-            NavigationView {
-                ScrollView {
-                    CircleImage(image: landmark.image)
+        NavigationView {
+            ScrollView {
+                CircleImage(image: landmark.image)
 
-                    VStack(alignment: .leading) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(landmark.park)
+                        Spacer()
+                        Text(landmark.state)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                    Divider()
+
+                    Text("About \(landmark.name)")
+                        .font(.title2)
+
+                    VStack {
                         HStack {
-                            Text(landmark.park)
-                            Spacer()
-                            Text(landmark.state)
+                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
+                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
                         }
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                        Divider()
-
-                        Text("About \(landmark.name)")
-                            .font(.title2)
-
-                        VStack {
-                            HStack {
-                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                            }
-                            HStack {
-                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                                ImageThumbnail(image: Image("wallPaper"), id: UUID(), selectedImageID: $selectedImageID, namespace: namespace)
-                            }
+                        HStack {
+                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
+                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
                         }
                     }
-                    .padding()
                 }
-                .navigationTitle(landmark.name)
-                .navigationBarTitleDisplayMode(.inline)
+                .padding()
             }
-            .zIndex(1) // NavigationViewを下に配置
-
-            if let selectedImageID = selectedImageID {
-                FullScreenImageDisplay(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
-                    .zIndex(2) // フルスクリーンビューを上に配置
-                    .ignoresSafeArea()
+            .navigationTitle(landmark.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .fullScreenCover(item: $selectedImageItem) { imageItem in
+                FullScreenImageDisplay(image: imageItem.image, selectedImageItem: $selectedImageItem, namespace: namespace)
             }
         }
     }
@@ -59,48 +53,43 @@ struct LandmarkDetail: View {
 
 struct ImageThumbnail: View {
     var image: Image
-    var id: UUID
-    @Binding var selectedImageID: UUID?
+    @Binding var selectedImageItem: ImageItem?
     var namespace: Namespace.ID
 
     var body: some View {
         image
             .resizable()
             .scaledToFit()
+//            .frame(height: 100)
+            .cornerRadius(10)
+            .shadow(radius: 5)
+//            .padding()
+            .matchedGeometryEffect(id: UUID(), in: namespace)
             .onTapGesture {
                 withAnimation(.spring()) {
-                    selectedImageID = id
+                    selectedImageItem = ImageItem(id: UUID(), image: image)
                 }
             }
-            .matchedGeometryEffect(id: id, in: namespace)
     }
 }
 
 struct FullScreenImageDisplay: View {
     var image: Image
-    var id: UUID
-    @Binding var selectedImageID: UUID?
+    @Binding var selectedImageItem: ImageItem?
     var namespace: Namespace.ID
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Color.black.opacity(0.5)
-                .ignoresSafeArea()
-
             image
                 .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .onTapGesture {
-                    withAnimation(.spring()) {
-                        selectedImageID = nil
-                    }
-                }
-                .matchedGeometryEffect(id: id, in: namespace)
+                .scaledToFill()
+                .ignoresSafeArea()
+                .matchedGeometryEffect(id: UUID(), in: namespace)
+               
 
             Button(action: {
                 withAnimation(.spring()) {
-                    selectedImageID = nil
+                    selectedImageItem = nil
                 }
             }) {
                 Image(systemName: "xmark")
@@ -114,8 +103,14 @@ struct FullScreenImageDisplay: View {
     }
 }
 
-#Preview {
-    let modelData = ModelData()
-    return LandmarkDetail(landmark: modelData.landmarks[0])
-        .environment(modelData)
+struct ImageItem: Identifiable {
+    let id: UUID
+    let image: Image
+}
+
+struct LandmarkDetail_Previews: PreviewProvider {
+    static var previews: some View {
+        LandmarkDetail(landmark: ModelData().landmarks[0])
+            .environment(ModelData())
+    }
 }
