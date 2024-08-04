@@ -6,6 +6,9 @@ struct LandmarkDetail: View {
     @State private var selectedImageItem: ImageItem? = nil
     @Namespace private var namespace
 
+    // 表示する画像のリスト
+    let images = ["wallPaper", "wallPaper", "wallPaper", "wallPaper"]
+
     var landmarkIndex: Int {
         modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
     }
@@ -29,16 +32,13 @@ struct LandmarkDetail: View {
                     Text("About \(landmark.name)")
                         .font(.title2)
 
-                    VStack {
-                        HStack {
-                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
-                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
-                        }
-                        HStack {
-                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
-                            ImageThumbnail(image: Image("wallPaper"), selectedImageItem: $selectedImageItem, namespace: namespace)
+                    // 2列のグリッドで画像を表示
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        ForEach(0..<images.count, id: \.self) { index in
+                            ImageThumbnail(image: Image(images[index]), selectedImageItem: $selectedImageItem, namespace: namespace)
                         }
                     }
+
                 }
                 .padding()
             }
@@ -60,10 +60,8 @@ struct ImageThumbnail: View {
         image
             .resizable()
             .scaledToFit()
-//            .frame(height: 100)
             .cornerRadius(10)
             .shadow(radius: 5)
-//            .padding()
             .matchedGeometryEffect(id: UUID(), in: namespace)
             .onTapGesture {
                 withAnimation(.spring()) {
@@ -85,7 +83,6 @@ struct FullScreenImageDisplay: View {
                 .scaledToFill()
                 .ignoresSafeArea()
                 .matchedGeometryEffect(id: UUID(), in: namespace)
-               
 
             Button(action: {
                 withAnimation(.spring()) {
