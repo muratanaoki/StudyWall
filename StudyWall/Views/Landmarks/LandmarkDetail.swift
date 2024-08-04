@@ -12,7 +12,7 @@ struct LandmarkDetail: View {
 
     var body: some View {
         ZStack {
-            NavigationView {
+
                 ScrollView {
                     CircleImage(image: landmark.image)
 
@@ -42,18 +42,17 @@ struct LandmarkDetail: View {
                         }
                     }
                     .padding()
-                }
-                .navigationTitle(landmark.name)
-                .navigationBarTitleDisplayMode(.inline)
             }
             .zIndex(1) // NavigationViewを下に配置
+
 
             if let selectedImageID = selectedImageID {
                 FullScreenImageDisplay(image: Image("wallPaper"), id: selectedImageID, selectedImageID: $selectedImageID, namespace: namespace)
                     .zIndex(2) // フルスクリーンビューを上に配置
                     .ignoresSafeArea()
             }
-        }
+        }.navigationTitle(landmark.name)
+            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
