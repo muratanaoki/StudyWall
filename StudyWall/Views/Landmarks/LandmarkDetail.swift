@@ -82,7 +82,6 @@ struct FullScreenSlideView: View {
             ForEach(0..<images.count, id: \.self) { index in
                 Image(images[index])
                     .resizable()
-                    .scaledToFill()
                     .tag(index)
                     .ignoresSafeArea()
             }
