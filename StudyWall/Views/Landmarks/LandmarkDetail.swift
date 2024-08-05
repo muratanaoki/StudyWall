@@ -46,26 +46,6 @@ struct LandmarkDetail: View {
                     Text("Word Data")
                         .font(.title2)
                         .padding(.top)
-
-                    ForEach(wordsData) { word in
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(word.word)
-                                .font(.headline)
-                            Text(word.translation)
-                                .font(.subheadline)
-                            Text(word.pronunciation)
-                                .font(.caption)
-                            ForEach(word.sentences) { sentence in
-                                VStack(alignment: .leading) {
-                                    Text(sentence.english)
-                                    Text(sentence.japanese)
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.top, 4)
-                            }
-                        }
-                        .padding(.vertical)
-                    }
                 }
                 .padding()
             }
@@ -104,56 +84,62 @@ struct FullScreenBlueView: View {
     @Binding var isFullScreen: ImageItem?
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) { // 右上に配置を指定
             Color.blue
                 .ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 15) {
-                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                        VStack(alignment: .leading) {
+            VStack(spacing: 10) {
+                ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
                             Text(wordsData[index].word)
-                                .font(.headline)
-                                .padding(.bottom, 2)
-                            Text(wordsData[index].translation)
                                 .font(.subheadline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             Text(wordsData[index].pronunciation)
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(wordsData[index].translation)
                                 .font(.caption)
-                                .padding(.bottom, 5)
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.bottom, 5)
 
-                            Divider()
-                                .background(Color.gray)
+                        Divider()
+                            .background(Color.gray)
 
-                            ForEach(wordsData[index].sentences) { sentence in
-                                VStack(alignment: .leading) {
-                                    Text(sentence.english)
-                                    Text(sentence.japanese)
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.top, 4)
+                        ForEach(wordsData[index].sentences) { sentence in
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(sentence.english)
+                                    .font(.caption)
+                                Text(sentence.japanese)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                             }
                         }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                        .padding(.horizontal, 10)
                     }
+                    .padding(10)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .padding(.horizontal, 10)
                 }
-                .padding(.top, 20)
             }
+            .padding(.top, 20)
+            .frame(maxHeight: .infinity)
 
             Button(action: {
                 isFullScreen = nil
             }) {
                 Image(systemName: "xmark.circle.fill")
-                    .font(.largeTitle)
+                    .font(.title)
                     .padding()
             }
             .foregroundColor(.white)
-            .padding()
-            .alignmentGuide(.top) { _ in 20 }
-            .alignmentGuide(.trailing) { _ in 20 }
+            .padding(.top, 0
+            )
+            .padding(.trailing, 10)
         }
     }
 }
