@@ -14,9 +14,13 @@ struct LandmarkDetail: View {
         modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
     }
 
+    // JSONから読み込んだ単語データ
+    let wordsData = loadWordsData(from: "english")
+
     var body: some View {
         NavigationView {
             ScrollView {
+
                 CircleImage(image: landmark.image)
 
                 VStack(alignment: .leading) {
@@ -38,6 +42,33 @@ struct LandmarkDetail: View {
                         ForEach(0..<images.count, id: \.self) { index in
                             ImageThumbnail(imageName: images[index], index: index, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
                         }
+                    }
+
+                    Divider()
+
+                    // WordDataの表示セクション
+                    Text("Word Data")
+                        .font(.title2)
+                        .padding(.top)
+
+                    ForEach(wordsData) { word in
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(word.word)
+                                .font(.headline)
+                            Text(word.translation)
+                                .font(.subheadline)
+                            Text(word.pronunciation)
+                                .font(.caption)
+                            ForEach(word.sentences) { sentence in
+                                VStack(alignment: .leading) {
+                                    Text(sentence.english)
+                                    Text(sentence.japanese)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.top, 4)
+                            }
+                        }
+                        .padding(.vertical)
                     }
                 }
                 .padding()
