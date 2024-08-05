@@ -7,9 +7,6 @@ struct LandmarkDetail: View {
     @State private var selectedIndex = 0
     @Namespace private var namespace
 
-    // 表示する画像のリスト
-    let images = ["wallPaper", "wallPaper", "wallPaper", "wallPaper"]
-
     var landmarkIndex: Int {
         modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
     }
@@ -20,7 +17,6 @@ struct LandmarkDetail: View {
     var body: some View {
         NavigationView {
             ScrollView {
-
                 CircleImage(image: landmark.image)
 
                 VStack(alignment: .leading) {
@@ -37,10 +33,10 @@ struct LandmarkDetail: View {
                     Text("About \(landmark.name)")
                         .font(.title2)
 
-                    // 2列のグリッドで画像を表示
+                    // 2列のグリッドで青い四角形を表示
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                        ForEach(0..<images.count, id: \.self) { index in
-                            ImageThumbnail(imageName: images[index], index: index, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
+                        ForEach(0..<4, id: \.self) { index in
+                            BlueRectangleThumbnail(index: index, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
                         }
                     }
 
@@ -75,51 +71,78 @@ struct LandmarkDetail: View {
             }
             .navigationTitle(landmark.name)
             .navigationBarTitleDisplayMode(.inline)
-            .fullScreenCover(item: $selectedImageItem) { imageItem in
-                FullScreenSlideView(images: images, currentIndex: $selectedIndex, isFullScreen: $selectedImageItem)
+            .fullScreenCover(item: $selectedImageItem) { _ in
+                FullScreenBlueView(wordsData: wordsData, isFullScreen: $selectedImageItem)
             }
         }
     }
 }
 
-struct ImageThumbnail: View {
-    var imageName: String
+// 青い四角形のサムネイルビュー
+struct BlueRectangleThumbnail: View {
     var index: Int
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
 
     var body: some View {
-        Image(imageName)
-            .resizable()
-            .scaledToFit()
+        Color.blue
+            .frame(height: 100)
             .cornerRadius(10)
             .shadow(radius: 5)
             .onTapGesture {
                 withAnimation(.spring()) {
                     selectedIndex = index
-                    isFullScreen = ImageItem(id: UUID(), imageName: imageName)
+                    isFullScreen = ImageItem(id: UUID(), imageName: "")
                 }
             }
     }
 }
 
-struct FullScreenSlideView: View {
-    let images: [String]
-    @Binding var currentIndex: Int
+// 青い背景の全画面モーダルビューに白いボックスを5つ表示
+struct FullScreenBlueView: View {
+    let wordsData: [WordData]
     @Binding var isFullScreen: ImageItem?
 
     var body: some View {
-        TabView(selection: $currentIndex) {
-            ForEach(0..<images.count, id: \.self) { index in
-                Image(images[index])
-                    .resizable()
-                    .tag(index)
-                    .ignoresSafeArea()
+        ZStack {
+            Color.blue
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(spacing: 15) {
+                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                        VStack(alignment: .leading) {
+                            Text(wordsData[index].word)
+                                .font(.headline)
+                                .padding(.bottom, 2)
+                            Text(wordsData[index].translation)
+                                .font(.subheadline)
+                            Text(wordsData[index].pronunciation)
+                                .font(.caption)
+                                .padding(.bottom, 5)
+
+                            Divider()
+                                .background(Color.gray)
+
+                            ForEach(wordsData[index].sentences) { sentence in
+                                VStack(alignment: .leading) {
+                                    Text(sentence.english)
+                                    Text(sentence.japanese)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.top, 4)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .padding(.horizontal, 10)
+                    }
+                }
+                .padding(.top, 20)
             }
-        }
-        .tabViewStyle(PageTabViewStyle())
-        .ignoresSafeArea()
-        .overlay(
+
             Button(action: {
                 isFullScreen = nil
             }) {
@@ -128,9 +151,10 @@ struct FullScreenSlideView: View {
                     .padding()
             }
             .foregroundColor(.white)
-            .padding(),
-            alignment: .topTrailing
-        )
+            .padding()
+            .alignmentGuide(.top) { _ in 20 }
+            .alignmentGuide(.trailing) { _ in 20 }
+        }
     }
 }
 
