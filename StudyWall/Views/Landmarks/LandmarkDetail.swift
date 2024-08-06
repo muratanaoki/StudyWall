@@ -91,7 +91,7 @@ struct FullScreenBlueView: View {
 
             VStack(spacing: 5) {
                 TabView {
-                    ForEach(0..<5, id: \.self) { _ in // 各スライドに5つのアイテムを表示
+                    ForEach(0..<5, id: \.self) { _ in
                         VStack {
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
                                 VStack(alignment: .leading, spacing: 4) {
@@ -152,6 +152,39 @@ struct FullScreenBlueView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 10)
 
+            // 下部にライトとカメラのアイコンを円形で配置
+            HStack {
+                Button(action: {
+                    // ライトのアクション
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.2))
+                            .frame(width: 60, height: 60)
+                        Image(systemName: "flashlight.on.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white)
+                    }
+                }
+                Spacer()
+                Button(action: {
+                    // カメラのアクション
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.2))
+                            .frame(width: 60, height: 60)
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white)
+                    }
+                }
+            }
+            .padding(.bottom, 20)
+            .padding(.horizontal, 60) // アイコン間のスペースを確保
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+
+            // 閉じるボタン
             Button(action: {
                 isFullScreen = nil
             }) {
@@ -170,6 +203,7 @@ struct FullScreenBlueView: View {
         }
     }
 }
+
 
 // DateFormatterを拡張してカスタムフォーマッタを追加
 extension DateFormatter {
