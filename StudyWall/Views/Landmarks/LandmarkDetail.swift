@@ -82,9 +82,10 @@ struct BlueRectangleThumbnail: View {
 struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var isFullScreen: ImageItem?
+    @State private var currentTime: Date = Date()
 
     var body: some View {
-        ZStack(alignment: .topTrailing) { // 右上に配置を指定
+        ZStack(alignment: .topTrailing) {
             Color.blue
                 .ignoresSafeArea()
 
@@ -129,6 +130,21 @@ struct FullScreenBlueView: View {
             .padding(.top, 20)
             .frame(maxHeight: .infinity)
 
+            // 時計と日付のオーバーレイ
+            VStack {
+                Text("\(currentTime, formatter: DateFormatter.dateFormatter)")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white)
+                    .padding(.top, 10)
+                Text("\(currentTime, formatter: DateFormatter.timeFormatter)")
+                    .font(.system(size: 80, weight: .thin))
+                    .foregroundColor(.white)
+                    .padding(.top, -10)
+                    .padding(.bottom, 50)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 10)
+
             Button(action: {
                 isFullScreen = nil
             }) {
@@ -137,10 +153,34 @@ struct FullScreenBlueView: View {
                     .padding()
             }
             .foregroundColor(.white)
-            .padding(.top, 0
-            )
+            .padding(.top, 20)
             .padding(.trailing, 10)
         }
+        .onAppear {
+            // 現在時刻を定期的に更新
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                currentTime = Date()
+            }
+        }
+    }
+}
+
+// DateFormatterを拡張してカスタムフォーマッタを追加
+extension DateFormatter {
+    static var timeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+        formatter.timeZone = .current
+        return formatter
+    }
+
+    static var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMM d"
+        formatter.timeZone = .current
+        return formatter
     }
 }
 
