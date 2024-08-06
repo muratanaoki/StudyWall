@@ -83,6 +83,7 @@ struct FullScreenBlueView: View {
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
     @State private var currentTime: Date = Date()
+    @State private var isLocked: Bool = true
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -138,50 +139,68 @@ struct FullScreenBlueView: View {
             .frame(maxHeight: .infinity)
 
             // 時計と日付のオーバーレイ
-            VStack {
-                Text("\(currentTime, formatter: DateFormatter.dateFormatter)")
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .padding(.top, 10)
-                Text("\(currentTime, formatter: DateFormatter.hhmmFormatter)")
-                    .font(.system(size: 80, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.top, -10)
-                    .padding(.bottom, 50)
+            if !isLocked {
+                VStack {
+                    Text("\(currentTime, formatter: DateFormatter.dateFormatter)")
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .padding(.top, 10)
+                    Text("\(currentTime, formatter: DateFormatter.hhmmFormatter)")
+                        .font(.system(size: 80, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.top, -10)
+                        .padding(.bottom, 50)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 10)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.top, 10)
+
             // 下部にライトとカメラのアイコンを円形で配置
-            HStack {
-                Button(action: {
-                    // ライトのアクション
-                }) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.white.opacity(0.2))
-                            .frame(width: 60, height: 60)
-                        Image(systemName: "flashlight.on.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.white)
+            if !isLocked {
+                HStack {
+                    Button(action: {
+                        // ライトのアクション
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.2))
+                                .frame(width: 60, height: 60)
+                            Image(systemName: "flashlight.on.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    Spacer()
+                    Button(action: {
+                        // カメラのアクション
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.2))
+                                .frame(width: 60, height: 60)
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.white)
+                        }
                     }
                 }
-                Spacer()
-                Button(action: {
-                    // カメラのアクション
-                }) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.white.opacity(0.2))
-                            .frame(width: 60, height: 60)
-                        Image(systemName: "camera.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.white)
-                    }
-                }
+                .padding(.bottom, 20)
+                .padding(.horizontal, 60)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             }
-            .padding(.bottom, 20)
-            .padding(.horizontal, 60) // アイコン間のスペースを確保
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+
+            // ロックのアイコンボタン
+            Button(action: {
+                isLocked.toggle()
+            }) {
+                Image(systemName: isLocked ? "lock.iphone" : "iphone")
+                    .font(.title)
+                    .padding()
+            }
+            .foregroundColor(.white)
+            .padding(.top, 0)
+            .padding(.trailing, 10)
+
             // 閉じるボタン
             Button(action: {
                 isFullScreen = nil
@@ -192,7 +211,7 @@ struct FullScreenBlueView: View {
             }
             .foregroundColor(.white)
             .padding(.top, 0)
-            .padding(.trailing, 10)
+            .padding(.trailing, 40)
         }
         .onAppear {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
