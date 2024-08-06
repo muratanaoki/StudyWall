@@ -52,7 +52,7 @@ struct LandmarkDetail: View {
             .navigationTitle(landmark.name)
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedImageItem) { _ in
-                FullScreenBlueView(wordsData: wordsData, isFullScreen: $selectedImageItem)
+                FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
             }
         }
     }
@@ -78,9 +78,9 @@ struct BlueRectangleThumbnail: View {
     }
 }
 
-// 青い背景の全画面モーダルビューに白いボックスを5つ表示
 struct FullScreenBlueView: View {
     let wordsData: [WordData]
+    @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
     @State private var currentTime: Date = Date()
 
@@ -89,45 +89,52 @@ struct FullScreenBlueView: View {
             Color.blue
                 .ignoresSafeArea()
 
-            VStack(spacing: 10) {
-                ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack {
-                            Text(wordsData[index].word)
-                                .font(.subheadline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text(wordsData[index].pronunciation)
-                                .font(.caption2)
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text(wordsData[index].translation)
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding(.bottom, 5)
+            VStack(spacing: 5) {
+                TabView {
+                    ForEach(0..<5, id: \.self) { _ in // 各スライドに5つのアイテムを表示
+                        VStack {
+                            ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text(wordsData[index].word)
+                                            .font(.subheadline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Text(wordsData[index].pronunciation)
+                                            .font(.caption2)
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Text(wordsData[index].translation)
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .padding(.bottom, 3)
 
-                        Divider()
-                            .background(Color.gray)
+                                    Divider()
+                                        .background(Color.gray)
 
-                        ForEach(wordsData[index].sentences) { sentence in
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(sentence.english)
-                                    .font(.caption)
-                                Text(sentence.japanese)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
+                                    ForEach(wordsData[index].sentences) { sentence in
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(sentence.english)
+                                                .font(.caption)
+                                            Text(sentence.japanese)
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                        }
+                                    }
+                                }
+                                .padding(8)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 5)
+                                .padding(.horizontal, 8)
                             }
                         }
+                        .padding(.top, 20)
                     }
-                    .padding(10)
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
-                    .padding(.horizontal, 10)
                 }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-            .padding(.top, 20)
             .frame(maxHeight: .infinity)
 
             // 時計と日付のオーバーレイ
@@ -136,8 +143,8 @@ struct FullScreenBlueView: View {
                     .font(.system(size: 18))
                     .foregroundColor(.white)
                     .padding(.top, 10)
-                Text("\(currentTime, formatter: DateFormatter.timeFormatter)")
-                    .font(.system(size: 80, weight: .thin))
+                Text("\(currentTime, formatter: DateFormatter.hhmmFormatter)")
+                    .font(.system(size: 80, weight: .bold))
                     .foregroundColor(.white)
                     .padding(.top, -10)
                     .padding(.bottom, 50)
@@ -153,11 +160,10 @@ struct FullScreenBlueView: View {
                     .padding()
             }
             .foregroundColor(.white)
-            .padding(.top, 20)
+            .padding(.top, 0)
             .padding(.trailing, 10)
         }
         .onAppear {
-            // 現在時刻を定期的に更新
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 currentTime = Date()
             }
@@ -167,18 +173,16 @@ struct FullScreenBlueView: View {
 
 // DateFormatterを拡張してカスタムフォーマッタを追加
 extension DateFormatter {
-    static var timeFormatter: DateFormatter {
+    static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm"
-        formatter.amSymbol = "AM"
-        formatter.pmSymbol = "PM"
+        formatter.dateFormat = "EEEE, MMM d"
         formatter.timeZone = .current
         return formatter
     }
 
-    static var dateFormatter: DateFormatter {
+    static var hhmmFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d"
+        formatter.dateFormat = "H:mm"
         formatter.timeZone = .current
         return formatter
     }
