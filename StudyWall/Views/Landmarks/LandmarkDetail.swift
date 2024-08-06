@@ -151,7 +151,6 @@ struct FullScreenBlueView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 10)
-
             // 下部にライトとカメラのアイコンを円形で配置
             HStack {
                 Button(action: {
@@ -183,7 +182,6 @@ struct FullScreenBlueView: View {
             .padding(.bottom, 20)
             .padding(.horizontal, 60) // アイコン間のスペースを確保
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-
             // 閉じるボタン
             Button(action: {
                 isFullScreen = nil
