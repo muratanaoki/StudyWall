@@ -1,10 +1,12 @@
 import SwiftUI
+import UIKit
 
 struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
     var landmark: Landmark
     @State private var selectedImageItem: ImageItem? = nil
     @State private var selectedIndex = 0
+    @State private var showAlert = false
     @Namespace private var namespace
 
     var landmarkIndex: Int {
@@ -52,8 +54,11 @@ struct LandmarkDetail: View {
             .navigationTitle(landmark.name)
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedImageItem) { _ in
-                FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
+                FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem, showAlert: $showAlert)
             }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("スクリーンショット"), message: Text("スクリーンショットが保存されました"), dismissButton: .default(Text("OK")))
         }
     }
 }
@@ -82,8 +87,10 @@ struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
+    @Binding var showAlert: Bool
     @State private var currentTime: Date = Date()
     @State private var isLocked: Bool = true
+    @State private var showButtons: Bool = true
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -190,45 +197,49 @@ struct FullScreenBlueView: View {
             }
 
             // ロック、ダウンロード、閉じるボタンをHStackで配置
-            HStack {
-                // ロックのアイコンボタン
-                Button(action: {
-                    isLocked.toggle()
-                }) {
-                    Image(systemName: isLocked ? "lock.iphone" : "iphone")
-                        .font(.title)
-                        .padding()
+            if showButtons {
+                HStack {
+                    // ロックのアイコンボタン
+                    Button(action: {
+                        isLocked.toggle()
+                    }) {
+                        Image(systemName: isLocked ? "lock.iphone" : "iphone")
+                            .font(.title)
+                            .padding()
+                    }
+                    .foregroundColor(.white)
 
+                    Spacer()
+
+                    // ダウンロードボタン
+                    Button(action: {
+                        showButtons = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            captureScreenshot()
+                            showButtons = true
+                        }
+                    }) {
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.title)
+                            .padding()
+                    }
+                    .foregroundColor(.white)
+
+                    Spacer()
+
+                    // 閉じるボタン
+                    Button(action: {
+                        isFullScreen = nil
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title)
+                            .padding()
+                    }
+                    .foregroundColor(.white)
                 }
-                .foregroundColor(.white)
-
-                Spacer()
-
-                // ダウンロードボタン
-                Button(action: {
-                    captureScreenshot()
-                }) {
-                    Image(systemName: "square.and.arrow.down")
-                        .font(.title)
-                        .padding()
-                }
-                .foregroundColor(.white)
-
-                Spacer()
-
-                // 閉じるボタン
-                Button(action: {
-                    isFullScreen = nil
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title)
-                        .padding()
-                }
-                .foregroundColor(.white)
+                .padding(.horizontal, 10)
+                .padding(.top, 0)
             }
-            .padding(.horizontal, 10)
-            .padding(.top, 0)
-
         }
         .onAppear {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -251,7 +262,6 @@ struct FullScreenBlueView: View {
         }
     }
 }
-
 
 // DateFormatterを拡張してカスタムフォーマッタを追加
 extension DateFormatter {
