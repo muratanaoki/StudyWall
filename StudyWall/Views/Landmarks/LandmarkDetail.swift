@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
