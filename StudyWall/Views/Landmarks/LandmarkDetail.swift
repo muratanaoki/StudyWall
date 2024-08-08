@@ -189,34 +189,65 @@ struct FullScreenBlueView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             }
 
-            // ロックのアイコンボタン
-            Button(action: {
-                isLocked.toggle()
-            }) {
-                Image(systemName: isLocked ? "lock.iphone" : "iphone")
-                    .font(.title)
-                    .padding()
-            }
-            .foregroundColor(.white)
-            .padding(.top, 0)
-            .padding(.trailing, 10)
+            // ロック、ダウンロード、閉じるボタンをHStackで配置
+            HStack {
+                // ロックのアイコンボタン
+                Button(action: {
+                    isLocked.toggle()
+                }) {
+                    Image(systemName: isLocked ? "lock.iphone" : "iphone")
+                        .font(.title)
+                        .padding()
 
-            // 閉じるボタン
-            Button(action: {
-                isFullScreen = nil
-            }) {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.title)
-                    .padding()
+                }
+                .foregroundColor(.white)
+
+                Spacer()
+
+                // ダウンロードボタン
+                Button(action: {
+                    captureScreenshot()
+                }) {
+                    Image(systemName: "square.and.arrow.down")
+                        .font(.title)
+                        .padding()
+                }
+                .foregroundColor(.white)
+
+                Spacer()
+
+                // 閉じるボタン
+                Button(action: {
+                    isFullScreen = nil
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title)
+                        .padding()
+                }
+                .foregroundColor(.white)
             }
-            .foregroundColor(.white)
+            .padding(.horizontal, 10)
             .padding(.top, 0)
-            .padding(.trailing, 40)
+
         }
         .onAppear {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 currentTime = Date()
             }
+        }
+    }
+
+    // 画面のキャプチャを行い、保存する関数
+    func captureScreenshot() {
+        let window = UIApplication.shared.windows.first { $0.isKeyWindow }
+        let screenBounds = window?.bounds ?? .zero
+        UIGraphicsBeginImageContextWithOptions(screenBounds.size, false, 0)
+        window?.drawHierarchy(in: screenBounds, afterScreenUpdates: true)
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        if let screenshot = screenshot {
+            UIImageWriteToSavedPhotosAlbum(screenshot, nil, nil, nil)
         }
     }
 }
