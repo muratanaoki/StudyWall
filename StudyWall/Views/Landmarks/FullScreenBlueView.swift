@@ -6,9 +6,7 @@ struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
-    @State private var showAlert = false // アラートを表示するかどうか
-    @State private var alertTitle = "" // アラートのタイトル
-    @State private var alertMessage = "" // アラートのメッセージ
+    @State private var alertData = AlertData(title: "", message: "", isPresented: false)
     @State private var currentTime: Date = Date()
     @State private var isLocked: Bool = true
     @State private var showButtons: Bool = true
@@ -25,7 +23,7 @@ struct FullScreenBlueView: View {
                     ForEach(0..<5, id: \.self) { _ in
                         VStack {
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                wordItemView(index: index)
+                                WordItemView(wordData: wordsData[index])
                             }
                         }
                         .padding(.top, 20)
@@ -36,10 +34,10 @@ struct FullScreenBlueView: View {
             .frame(maxHeight: .infinity)
 
             // アラートを表示するためのモディファイア
-            .alert(isPresented: $showAlert) {
+            .alert(isPresented: $alertData.isPresented) {
                 Alert(
-                    title: Text(alertTitle),
-                    message: Text(alertMessage),
+                    title: Text(alertData.title),
+                    message: Text(alertData.message),
                     dismissButton: .default(Text("OK"))
                 )
             }
@@ -51,58 +49,10 @@ struct FullScreenBlueView: View {
         }
         .onAppear {
             startClock()
-            setupNotificationListeners()
         }
     }
 
-    private func setupNotificationListeners() {
-        NotificationCenter.default.addObserver(forName: .screenshotSaveSucceeded, object: nil, queue: .main) { _ in
-            alertTitle = "ダウンロード成功"
-            alertMessage = "画像が正常に保存されました。"
-            showAlert = true
-        }
-        NotificationCenter.default.addObserver(forName: .screenshotSaveFailed, object: nil, queue: .main) { _ in
-            alertTitle = "ダウンロード失敗"
-            alertMessage = "画像の保存に失敗しました。もう一度お試しください。"
-            showAlert = true
-        }
-    }
-
-    private func wordItemView(index: Int) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(wordsData[index].word)
-                    .font(.subheadline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text(wordsData[index].pronunciation)
-                    .font(.caption2)
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text(wordsData[index].translation)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.bottom, 3)
-            Divider()
-                .background(Color.gray)
-            ForEach(wordsData[index].sentences) { sentence in
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(sentence.english)
-                        .font(.caption)
-                    Text(sentence.japanese)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(8)
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
-        .padding(.horizontal, 8)
-    }
-
+    // 時計と日付を表示するビュー
     private var timeOverlay: some View {
         VStack {
             Text("\(currentTime, formatter: DateFormatter.dateFormatter)")
@@ -119,14 +69,15 @@ struct FullScreenBlueView: View {
         .padding(.top, 10)
     }
 
+    // フラッシュライトとカメラのボタンを表示するビュー
     private var controlButtons: some View {
         HStack {
             Button(action: {}) {
-                iconButton(imageName: "flashlight.on.fill")
+                IconButton(imageName: "flashlight.on.fill")
             }
             Spacer()
             Button(action: {}) {
-                iconButton(imageName: "camera.fill")
+                IconButton(imageName: "camera.fill")
             }
         }
         .padding(.bottom, 20)
@@ -134,6 +85,7 @@ struct FullScreenBlueView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
+    // 上部にロックボタンやスクリーンショットボタンを表示するビュー
     private var topButtons: some View {
         HStack {
             Button(action: { isLocked.toggle() }) {
@@ -167,7 +119,101 @@ struct FullScreenBlueView: View {
         .padding(.top, 0)
     }
 
-    private func iconButton(imageName: String) -> some View {
+    // 時計をスタートさせる関数
+    private func startClock() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            currentTime = Date()
+        }
+    }
+
+    // スクリーンショットをキャプチャして保存する関数
+    private func captureScreenshot() {
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        let screenBounds = window.bounds
+        UIGraphicsBeginImageContextWithOptions(screenBounds.size, false, 0)
+        window.drawHierarchy(in: screenBounds, afterScreenUpdates: true)
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        if let screenshot = screenshot {
+            saveImageToPhotos(screenshot) { success in
+                if success {
+                    alertData.title = "ダウンロード成功"
+                    alertData.message = "画像が正常に保存されました。"
+                } else {
+                    alertData.title = "ダウンロード失敗"
+                    alertData.message = "画像の保存に失敗しました。もう一度お試しください。"
+                }
+                alertData.isPresented = true
+            }
+        }
+    }
+
+    // 画像をフォトライブラリに保存する関数
+    private func saveImageToPhotos(_ image: UIImage, completion: @escaping (Bool) -> Void) {
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized else {
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+                return
+            }
+
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                DispatchQueue.main.async {
+                    completion(success)
+                }
+            }
+        }
+    }
+}
+
+// 単語データの表示をカスタマイズするビュー
+struct WordItemView: View {
+    let wordData: WordData
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(wordData.word)
+                    .font(.subheadline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(wordData.pronunciation)
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(wordData.translation)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.bottom, 3)
+            Divider()
+                .background(Color.gray)
+            ForEach(wordData.sentences) { sentence in
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(sentence.english)
+                        .font(.caption)
+                    Text(sentence.japanese)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(8)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
+        .padding(.horizontal, 8)
+    }
+}
+
+// 丸いアイコンボタンを表示するカスタムビュー
+struct IconButton: View {
+    let imageName: String
+
+    var body: some View {
         ZStack {
             Circle()
                 .fill(Color.white.opacity(0.2))
@@ -177,55 +223,13 @@ struct FullScreenBlueView: View {
                 .foregroundColor(.white)
         }
     }
-
-    private func startClock() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            currentTime = Date()
-        }
-    }
-
-    // スクリーンショットをキャプチャして保存する関数をPhotosフレームワークで実装
-    func captureScreenshot() {
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
-        let screenBounds = window.bounds
-        UIGraphicsBeginImageContextWithOptions(screenBounds.size, false, 0)
-        window.drawHierarchy(in: screenBounds, afterScreenUpdates: true)
-        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        if let screenshot = screenshot {
-            saveImageToPhotos(screenshot)
-        }
-    }
-
-    // 画像をフォトライブラリに保存する関数
-    func saveImageToPhotos(_ image: UIImage) {
-        PHPhotoLibrary.requestAuthorization { status in
-            guard status == .authorized else {
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
-                }
-                return
-            }
-
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
-            }) { success, error in
-                DispatchQueue.main.async {
-                    if success {
-                        NotificationCenter.default.post(name: .screenshotSaveSucceeded, object: nil)
-                    } else {
-                        NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
-                    }
-                }
-            }
-        }
-    }
 }
 
-// 通知名を拡張して簡単に使えるようにする
-extension Notification.Name {
-    static let screenshotSaveSucceeded = Notification.Name("screenshotSaveSucceeded")
-    static let screenshotSaveFailed = Notification.Name("screenshotSaveFailed")
+// アラートデータ構造体
+struct AlertData {
+    var title: String
+    var message: String
+    var isPresented: Bool
 }
 
 // プレビュー用のコード
