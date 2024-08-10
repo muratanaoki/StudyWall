@@ -32,6 +32,13 @@ struct FullScreenBlueView: View {
             if showButtons { topButtons }
         }
         .onAppear { startClock() }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("ダウンロード成功"),
+                message: Text("画像が正常に保存されました。"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 
     private func wordItemView(index: Int) -> some View {
