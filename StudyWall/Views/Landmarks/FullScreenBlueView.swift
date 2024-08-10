@@ -1,15 +1,15 @@
 import SwiftUI
 import Photos
 
-// フルスクリーンで青い背景と単語データを表示するビュー
 struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
     @State private var alertData = AlertData(title: "", message: "", isPresented: false)
     @State private var currentTime: Date = Date()
-    @State private var isLocked: Bool = true
-    @State private var showButtons: Bool = true
+    @State private var isLocked: Bool = false
+    @State private var showControlButtons: Bool = false
+    @State private var tapGestureEnabled: Bool = false
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -32,8 +32,6 @@ struct FullScreenBlueView: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .frame(maxHeight: .infinity)
-
-            // アラートを表示するためのモディファイア
             .alert(isPresented: $alertData.isPresented) {
                 Alert(
                     title: Text(alertData.title),
@@ -42,10 +40,26 @@ struct FullScreenBlueView: View {
                 )
             }
 
-            // 画面がロックされていない場合に時計とボタンを表示
-            if !isLocked { timeOverlay }
-            if !isLocked { controlButtons }
-            if showButtons { topButtons }
+            // 画面全体でのタップ操作を検知
+            if tapGestureEnabled {
+                Color.clear
+                    .contentShape(Rectangle())  // タップ可能な領域を拡張
+                    .onTapGesture {
+                        // 画面をタップしたときにボタンの表示を切り替える
+                        withAnimation {
+                            showControlButtons = false
+                            isLocked = false
+                            tapGestureEnabled = false  // タップ機能をオフにする
+                        }
+                    }
+            }
+
+            // 時計、日付、ライトボタン、カメラボタン（ロックされている時に表示）
+            if isLocked { timeOverlay }
+            if isLocked { controlIcons }
+
+            // 上部にDLボタン、バツボタン、ロックボタンを表示（初期表示とロック解除後に表示）
+            if !isLocked { topButtons }
         }
         .onAppear {
             startClock()
@@ -69,38 +83,37 @@ struct FullScreenBlueView: View {
         .padding(.top, 10)
     }
 
-    // フラッシュライトとカメラのボタンを表示するビュー
-    private var controlButtons: some View {
+    // フラッシュライトとカメラのアイコンを表示するビュー
+    private var controlIcons: some View {
         HStack {
-            Button(action: {}) {
-                IconButton(imageName: "flashlight.on.fill")
-            }
+            IconButton(imageName: "flashlight.on.fill")
             Spacer()
-            Button(action: {}) {
-                IconButton(imageName: "camera.fill")
-            }
+            IconButton(imageName: "camera.fill")
         }
         .padding(.bottom, 20)
         .padding(.horizontal, 60)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
-    // 上部にロックボタンやスクリーンショットボタンを表示するビュー
+    // 上部にロックボタンやスクリーンショットボタン、バツボタンを表示するビュー
     private var topButtons: some View {
         HStack {
-            Button(action: { isLocked.toggle() }) {
-                Image(systemName: isLocked ? "lock.iphone" : "iphone")
+            Button(action: {
+                withAnimation {
+                    isLocked = true
+                    showControlButtons = true
+                    tapGestureEnabled = true  // タップ機能を有効にする
+                }
+            }) {
+                Image(systemName: "lock.iphone")
                     .font(.title)
                     .padding()
             }
             .foregroundColor(.white)
             Spacer()
             Button(action: {
-                showButtons = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    captureScreenshot()
-                    showButtons = true
-                }
+                // DL機能（スクリーンショットをキャプチャして保存する）
+                captureScreenshot()
             }) {
                 Image(systemName: "square.and.arrow.down")
                     .font(.title)
@@ -209,7 +222,7 @@ struct WordItemView: View {
     }
 }
 
-// 丸いアイコンボタンを表示するカスタムビュー
+// 丸いアイコンを表示するカスタムビュー（ボタン機能なし）
 struct IconButton: View {
     let imageName: String
 
@@ -252,7 +265,8 @@ struct FullScreenBlueView_Previews: PreviewProvider {
                     Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
                     Sentence(english: "Here is another example.", japanese: "こちらも例です。")
                 ]
-            )
+            ),
+
         ]
     }
 }
