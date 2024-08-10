@@ -161,7 +161,66 @@ struct FullScreenBlueView: View {
             UIImageWriteToSavedPhotosAlbum(screenshot, nil, nil, nil)
             DispatchQueue.main.async {
                 showAlert = true // スクリーンショットが保存された後にアラートを表示
+                print("スクリーンショットが保存されました。アラートを表示します。") // デバッグ用ログ
             }
         }
+    }
+}
+
+// プレビュー用のコード
+struct FullScreenBlueView_Previews: PreviewProvider {
+    static var previews: some View {
+        FullScreenBlueView(
+            wordsData: sampleWordsData,
+            selectedIndex: .constant(0),
+            isFullScreen: .constant(nil),
+            showAlert: .constant(false)
+        )
+    }
+
+    static var sampleWordsData: [WordData] {
+        [
+            WordData(
+                word: "Example",
+                translation: "例",
+                pronunciation: "[ɪɡˈzæmpəl]",
+                sentences: [
+                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
+                ]
+            ),WordData(
+                word: "Example",
+                translation: "例",
+                pronunciation: "[ɪɡˈzæmpəl]",
+                sentences: [
+                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
+                ]
+            ),WordData(
+                word: "Example",
+                translation: "例",
+                pronunciation: "[ɪɡˈzæmpəl]",
+                sentences: [
+                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
+                ]
+            ),WordData(
+                word: "Example",
+                translation: "例",
+                pronunciation: "[ɪɡˈzæmpəl]",
+                sentences: [
+                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
+                ]
+            ),WordData(
+                word: "Example",
+                translation: "例",
+                pronunciation: "[ɪɡˈzæmpəl]",
+                sentences: [
+                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
+                ]
+            )
+        ]
     }
 }
