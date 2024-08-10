@@ -10,6 +10,7 @@ struct FullScreenBlueView: View {
     @State private var isLocked: Bool = false
     @State private var showControlButtons: Bool = false
     @State private var tapGestureEnabled: Bool = false
+    @State private var hideButtonsForScreenshot: Bool = false
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -59,7 +60,7 @@ struct FullScreenBlueView: View {
             if isLocked { controlIcons }
 
             // 上部にDLボタン、バツボタン、ロックボタンを表示（初期表示とロック解除後に表示）
-            if !isLocked { topButtons }
+            if !isLocked && !hideButtonsForScreenshot { topButtons }
         }
         .onAppear {
             startClock()
@@ -112,8 +113,12 @@ struct FullScreenBlueView: View {
             .foregroundColor(.white)
             Spacer()
             Button(action: {
-                // DL機能（スクリーンショットをキャプチャして保存する）
-                captureScreenshot()
+                // ボタンを一時的に非表示にしてスクリーンショットを撮影
+                hideButtonsForScreenshot = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    captureScreenshot()
+                    hideButtonsForScreenshot = false
+                }
             }) {
                 Image(systemName: "square.and.arrow.down")
                     .font(.title)
@@ -266,7 +271,6 @@ struct FullScreenBlueView_Previews: PreviewProvider {
                     Sentence(english: "Here is another example.", japanese: "こちらも例です。")
                 ]
             ),
-
         ]
     }
 }
