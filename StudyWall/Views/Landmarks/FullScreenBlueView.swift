@@ -1,25 +1,16 @@
 import SwiftUI
-import UIKit
+import Photos
 
 // フルスクリーンで青い背景と単語データを表示するビュー
 struct FullScreenBlueView: View {
-    // 表示する単語データ
     let wordsData: [WordData]
-    // 現在選択されているインデックス
     @Binding var selectedIndex: Int
-    // モーダル表示の状態
     @Binding var isFullScreen: ImageItem?
-    // アラートを表示するかどうか
-    @State private var showAlert = false
-    // アラートのタイトル
-    @State private var alertTitle = ""
-    // アラートのメッセージ
-    @State private var alertMessage = ""
-    // 現在の時刻
+    @State private var showAlert = false // アラートを表示するかどうか
+    @State private var alertTitle = "" // アラートのタイトル
+    @State private var alertMessage = "" // アラートのメッセージ
     @State private var currentTime: Date = Date()
-    // 画面がロックされているかどうか
     @State private var isLocked: Bool = true
-    // ボタンを表示するかどうか
     @State private var showButtons: Bool = true
 
     var body: some View {
@@ -30,9 +21,7 @@ struct FullScreenBlueView: View {
 
             // 単語データを表示するコンテンツ
             VStack(spacing: 5) {
-                // 横にスライドできるタブビュー
                 TabView {
-                    // 単語データを表示する繰り返し処理
                     ForEach(0..<5, id: \.self) { _ in
                         VStack {
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
@@ -42,7 +31,6 @@ struct FullScreenBlueView: View {
                         .padding(.top, 20)
                     }
                 }
-                // タブインジケーターを表示しない設定
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .frame(maxHeight: .infinity)
@@ -62,13 +50,11 @@ struct FullScreenBlueView: View {
             if showButtons { topButtons }
         }
         .onAppear {
-            // 画面が表示されたときに時計を開始し、通知リスナーを設定
             startClock()
             setupNotificationListeners()
         }
     }
 
-    // 通知リスナーを設定する関数
     private func setupNotificationListeners() {
         NotificationCenter.default.addObserver(forName: .screenshotSaveSucceeded, object: nil, queue: .main) { _ in
             alertTitle = "ダウンロード成功"
@@ -82,7 +68,6 @@ struct FullScreenBlueView: View {
         }
     }
 
-    // 単語データの表示をカスタマイズするビュー
     private func wordItemView(index: Int) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -118,7 +103,6 @@ struct FullScreenBlueView: View {
         .padding(.horizontal, 8)
     }
 
-    // 時計と日付を表示するビュー
     private var timeOverlay: some View {
         VStack {
             Text("\(currentTime, formatter: DateFormatter.dateFormatter)")
@@ -135,7 +119,6 @@ struct FullScreenBlueView: View {
         .padding(.top, 10)
     }
 
-    // フラッシュライトとカメラのボタンを表示するビュー
     private var controlButtons: some View {
         HStack {
             Button(action: {}) {
@@ -151,7 +134,6 @@ struct FullScreenBlueView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
-    // 上部にロックボタンやスクリーンショットボタンを表示するビュー
     private var topButtons: some View {
         HStack {
             Button(action: { isLocked.toggle() }) {
@@ -185,7 +167,6 @@ struct FullScreenBlueView: View {
         .padding(.top, 0)
     }
 
-    // 丸いアイコンボタンを表示するカスタムビュー
     private func iconButton(imageName: String) -> some View {
         ZStack {
             Circle()
@@ -197,14 +178,13 @@ struct FullScreenBlueView: View {
         }
     }
 
-    // 時計をスタートさせる関数
     private func startClock() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             currentTime = Date()
         }
     }
 
-    // スクリーンショットをキャプチャして保存する関数
+    // スクリーンショットをキャプチャして保存する関数をPhotosフレームワークで実装
     func captureScreenshot() {
         guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
         let screenBounds = window.bounds
@@ -213,21 +193,30 @@ struct FullScreenBlueView: View {
         let screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         if let screenshot = screenshot {
-            UIImageWriteToSavedPhotosAlbum(screenshot, ScreenshotSaver.shared, #selector(ScreenshotSaver.saveCompleted(_:didFinishSavingWithError:contextInfo:)), nil)
+            saveImageToPhotos(screenshot)
         }
     }
-}
 
-// スクリーンショットの保存処理を行うクラス
-class ScreenshotSaver: NSObject {
-    static let shared = ScreenshotSaver()
+    // 画像をフォトライブラリに保存する関数
+    func saveImageToPhotos(_ image: UIImage) {
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized else {
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
+                }
+                return
+            }
 
-    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        DispatchQueue.main.async {
-            if let error = error {
-                NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
-            } else {
-                NotificationCenter.default.post(name: .screenshotSaveSucceeded, object: nil)
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                DispatchQueue.main.async {
+                    if success {
+                        NotificationCenter.default.post(name: .screenshotSaveSucceeded, object: nil)
+                    } else {
+                        NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
+                    }
+                }
             }
         }
     }
