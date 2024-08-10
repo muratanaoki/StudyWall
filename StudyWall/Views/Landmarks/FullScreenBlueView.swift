@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 import Photos
 
 struct FullScreenBlueView: View {
@@ -12,6 +13,8 @@ struct FullScreenBlueView: View {
     @State private var tapGestureEnabled: Bool = false
     @State private var hideButtonsForScreenshot: Bool = false
 
+    private let speechSynthesizer = AVSpeechSynthesizer()
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             // 背景色を青に設定し、画面全体に広がるようにする
@@ -24,7 +27,7 @@ struct FullScreenBlueView: View {
                     ForEach(0..<5, id: \.self) { _ in
                         VStack {
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                WordItemView(wordData: wordsData[index])
+                                WordItemView(wordData: wordsData[index], speechSynthesizer: speechSynthesizer)
                             }
                         }
                         .padding(.top, 20)
@@ -59,7 +62,7 @@ struct FullScreenBlueView: View {
             if isLocked { timeOverlay }
             if isLocked { controlIcons }
 
-            // 上部にDLボタン、バツボタン、ロックボタンを表示（初期表示とロック解除後に表示）
+            // 上部にDLボタン、バツボタン、ロックボタンを表示するビュー
             if !isLocked && !hideButtonsForScreenshot { topButtons }
         }
         .onAppear {
@@ -190,6 +193,7 @@ struct FullScreenBlueView: View {
 // 単語データの表示をカスタマイズするビュー
 struct WordItemView: View {
     let wordData: WordData
+    let speechSynthesizer: AVSpeechSynthesizer
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -197,6 +201,14 @@ struct WordItemView: View {
                 Text(wordData.word)
                     .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                Button(action: {
+                    let utterance = AVSpeechUtterance(string: wordData.word)
+                    utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                    speechSynthesizer.speak(utterance)
+                }) {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .foregroundColor(.blue)
+                }
                 Text(wordData.pronunciation)
                     .font(.caption2)
                     .foregroundColor(.gray)
@@ -211,8 +223,19 @@ struct WordItemView: View {
                 .background(Color.gray)
             ForEach(wordData.sentences) { sentence in
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(sentence.english)
-                        .font(.caption)
+                    HStack {
+                        Text(sentence.english)
+                            .font(.caption)
+                        Spacer()
+                        Button(action: {
+                            let utterance = AVSpeechUtterance(string: sentence.english)
+                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                            speechSynthesizer.speak(utterance)
+                        }) {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .foregroundColor(.blue)
+                        }
+                    }
                     Text(sentence.japanese)
                         .font(.caption)
                         .foregroundColor(.gray)

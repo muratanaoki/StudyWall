@@ -21,8 +21,7 @@ struct LandmarkDetail: View {
                     landmarkInfo
                     Divider()
                     aboutLandmark
-                    Divider()
-                    wordDataSection
+
                 }
                 .padding()
             }
@@ -32,7 +31,7 @@ struct LandmarkDetail: View {
                 FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
             }
         }
-       
+
     }
 
     private var landmarkInfo: some View {
@@ -54,14 +53,6 @@ struct LandmarkDetail: View {
                     BlueRectangleThumbnail(index: index, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
                 }
             }
-        }
-    }
-
-    private var wordDataSection: some View {
-        VStack(alignment: .leading) {
-            Text("Word Data")
-                .font(.title2)
-                .padding(.top)
         }
     }
 }
