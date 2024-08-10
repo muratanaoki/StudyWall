@@ -5,7 +5,6 @@ struct LandmarkDetail: View {
     var landmark: Landmark
     @State private var selectedImageItem: ImageItem? = nil
     @State private var selectedIndex = 0
-    @State private var showAlert = false
     @Namespace private var namespace
 
     var landmarkIndex: Int {
@@ -30,12 +29,10 @@ struct LandmarkDetail: View {
             .navigationTitle(landmark.name)
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedImageItem) { _ in
-                FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem, showAlert: $showAlert)
+                FullScreenBlueView(wordsData: wordsData, selectedIndex: $selectedIndex, isFullScreen: $selectedImageItem)
             }
         }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text("スクリーンショット"), message: Text("スクリーンショットが保存されました"), dismissButton: .default(Text("OK")))
-        }
+       
     }
 
     private var landmarkInfo: some View {

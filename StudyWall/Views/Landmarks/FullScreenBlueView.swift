@@ -1,10 +1,13 @@
 import SwiftUI
+import UIKit
 
 struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var selectedIndex: Int
     @Binding var isFullScreen: ImageItem?
-    @Binding var showAlert: Bool
+    @State private var showAlert = false // アラートを表示するかどうか
+    @State private var alertTitle = "" // アラートのタイトル
+    @State private var alertMessage = "" // アラートのメッセージ
     @State private var currentTime: Date = Date()
     @State private var isLocked: Bool = true
     @State private var showButtons: Bool = true
@@ -27,17 +30,33 @@ struct FullScreenBlueView: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .frame(maxHeight: .infinity)
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(alertTitle),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             if !isLocked { timeOverlay }
             if !isLocked { controlButtons }
             if showButtons { topButtons }
         }
-        .onAppear { startClock() }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("ダウンロード成功"),
-                message: Text("画像が正常に保存されました。"),
-                dismissButton: .default(Text("OK"))
-            )
+        .onAppear {
+            startClock()
+            setupNotificationListeners()
+        }
+    }
+
+    private func setupNotificationListeners() {
+        NotificationCenter.default.addObserver(forName: .screenshotSaveSucceeded, object: nil, queue: .main) { _ in
+            alertTitle = "ダウンロード成功"
+            alertMessage = "画像が正常に保存されました。"
+            showAlert = true
+        }
+        NotificationCenter.default.addObserver(forName: .screenshotSaveFailed, object: nil, queue: .main) { _ in
+            alertTitle = "ダウンロード失敗"
+            alertMessage = "画像の保存に失敗しました。もう一度お試しください。"
+            showAlert = true
         }
     }
 
@@ -165,13 +184,29 @@ struct FullScreenBlueView: View {
         let screenshot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         if let screenshot = screenshot {
-            UIImageWriteToSavedPhotosAlbum(screenshot, nil, nil, nil)
-            DispatchQueue.main.async {
-                showAlert = true // スクリーンショットが保存された後にアラートを表示
-                print("スクリーンショットが保存されました。アラートを表示します。") // デバッグ用ログ
+            UIImageWriteToSavedPhotosAlbum(screenshot, ScreenshotSaver.shared, #selector(ScreenshotSaver.saveCompleted(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+    }
+}
+
+// クラスベースのクラスを使って Objective-C メソッドを使用
+class ScreenshotSaver: NSObject {
+    static let shared = ScreenshotSaver()
+
+    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        DispatchQueue.main.async {
+            if let error = error {
+                NotificationCenter.default.post(name: .screenshotSaveFailed, object: nil)
+            } else {
+                NotificationCenter.default.post(name: .screenshotSaveSucceeded, object: nil)
             }
         }
     }
+}
+
+extension Notification.Name {
+    static let screenshotSaveSucceeded = Notification.Name("screenshotSaveSucceeded")
+    static let screenshotSaveFailed = Notification.Name("screenshotSaveFailed")
 }
 
 // プレビュー用のコード
@@ -180,46 +215,13 @@ struct FullScreenBlueView_Previews: PreviewProvider {
         FullScreenBlueView(
             wordsData: sampleWordsData,
             selectedIndex: .constant(0),
-            isFullScreen: .constant(nil),
-            showAlert: .constant(false)
+            isFullScreen: .constant(nil)
         )
     }
 
     static var sampleWordsData: [WordData] {
         [
             WordData(
-                word: "Example",
-                translation: "例",
-                pronunciation: "[ɪɡˈzæmpəl]",
-                sentences: [
-                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
-                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
-                ]
-            ),WordData(
-                word: "Example",
-                translation: "例",
-                pronunciation: "[ɪɡˈzæmpəl]",
-                sentences: [
-                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
-                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
-                ]
-            ),WordData(
-                word: "Example",
-                translation: "例",
-                pronunciation: "[ɪɡˈzæmpəl]",
-                sentences: [
-                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
-                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
-                ]
-            ),WordData(
-                word: "Example",
-                translation: "例",
-                pronunciation: "[ɪɡˈzæmpəl]",
-                sentences: [
-                    Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
-                    Sentence(english: "Here is another example.", japanese: "こちらも例です。")
-                ]
-            ),WordData(
                 word: "Example",
                 translation: "例",
                 pronunciation: "[ɪɡˈzæmpəl]",
