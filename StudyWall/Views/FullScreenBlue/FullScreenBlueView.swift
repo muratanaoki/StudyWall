@@ -16,7 +16,7 @@ struct FullScreenBlueView: View {
                     ForEach(0..<5, id: \.self) { _ in
                         VStack {
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                WordItemView(wordData: wordsData[index], speechSynthesizer: viewModel.speechSynthesizer)
+                                WordItemView(wordData: wordsData[index], speechSynthesizer: viewModel.speechSynthesizer, isSpeakerButtonHidden: $viewModel.areControlButtonsHidden)
                             }
                         }
                         .padding(.top, 20)
@@ -48,19 +48,21 @@ struct FullScreenBlueView: View {
             if viewModel.isLocked { TimeOverlayView(currentTime: viewModel.currentTime) }
             if viewModel.isLocked { ControlIconsView() }
 
-            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot {
+            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden {
                 TopButtonsView(isFullScreen: $isFullScreen)
             }
 
-            // Add BottomButtonsView here
-            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot {
+            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden {
                 VStack {
                     Spacer()
                     BottomButtonsView(
                         isLocked: $viewModel.isLocked,
                         hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                        captureScreenshot: viewModel.captureScreenshot,
-                        tapGestureEnabled: $viewModel.tapGestureEnabled
+                        captureScreenshot: {
+                            viewModel.captureScreenshot()
+                        },
+                        tapGestureEnabled: $viewModel.tapGestureEnabled,
+                        areControlButtonsHidden: $viewModel.areControlButtonsHidden // ここを追加
                     )
                 }
             }

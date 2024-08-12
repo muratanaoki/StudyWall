@@ -4,6 +4,7 @@ import AVFoundation
 struct WordItemView: View {
     let wordData: WordData
     let speechSynthesizer: AVSpeechSynthesizer
+    @Binding var isSpeakerButtonHidden: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -11,18 +12,20 @@ struct WordItemView: View {
                 Text(wordData.word)
                     .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Button(action: {
-                    // 現在再生中の音声を停止する
-                    if speechSynthesizer.isSpeaking {
-                        speechSynthesizer.stopSpeaking(at: .immediate)
+                if !isSpeakerButtonHidden {  // スピーカーボタンが非表示でない場合にのみ表示
+                    Button(action: {
+                        // 現在再生中の音声を停止する
+                        if speechSynthesizer.isSpeaking {
+                            speechSynthesizer.stopSpeaking(at: .immediate)
+                        }
+                        // 新しい音声を再生する
+                        let utterance = AVSpeechUtterance(string: wordData.word)
+                        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                        speechSynthesizer.speak(utterance)
+                    }) {
+                        Image(systemName: "speaker.wave.2.fill")
+                            .foregroundColor(.blue)
                     }
-                    // 新しい音声を再生する
-                    let utterance = AVSpeechUtterance(string: wordData.word)
-                    utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                    speechSynthesizer.speak(utterance)
-                }) {
-                    Image(systemName: "speaker.wave.2.fill")
-                        .foregroundColor(.blue)
                 }
                 Text(wordData.pronunciation)
                     .font(.caption2)
@@ -42,18 +45,20 @@ struct WordItemView: View {
                         Text(sentence.english)
                             .font(.caption)
                         Spacer()
-                        Button(action: {
-                            // 現在再生中の音声を停止する
-                            if speechSynthesizer.isSpeaking {
-                                speechSynthesizer.stopSpeaking(at: .immediate)
+                        if !isSpeakerButtonHidden {  // スピーカーボタンが非表示でない場合にのみ表示
+                            Button(action: {
+                                // 現在再生中の音声を停止する
+                                if speechSynthesizer.isSpeaking {
+                                    speechSynthesizer.stopSpeaking(at: .immediate)
+                                }
+                                // 新しい音声を再生する
+                                let utterance = AVSpeechUtterance(string: sentence.english)
+                                utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                                speechSynthesizer.speak(utterance)
+                            }) {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .foregroundColor(.blue)
                             }
-                            // 新しい音声を再生する
-                            let utterance = AVSpeechUtterance(string: sentence.english)
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            speechSynthesizer.speak(utterance)
-                        }) {
-                            Image(systemName: "speaker.wave.2.fill")
-                                .foregroundColor(.blue)
                         }
                     }
                     Text(sentence.japanese)
