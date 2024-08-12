@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D722C5992C6838C600211062 /* WordData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5982C6838C600211062 /* WordData.swift */; };
+		D722C59B2C6838EC00211062 /* Sentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C59A2C6838EC00211062 /* Sentence.swift */; };
+		D737C4462C67A0AE006782BD /* FullScreenBlueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */; };
+		D737C4482C67A14E006782BD /* FullScreenBlueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4472C67A14E006782BD /* FullScreenBlueView.swift */; };
+		D737C44A2C67A21E006782BD /* WordItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4492C67A21E006782BD /* WordItemView.swift */; };
+		D737C44C2C67A235006782BD /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C44B2C67A235006782BD /* IconButton.swift */; };
+		D737C44E2C67A256006782BD /* TimeOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C44D2C67A256006782BD /* TimeOverlayView.swift */; };
+		D737C4502C67A26C006782BD /* ControlIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C44F2C67A26C006782BD /* ControlIconsView.swift */; };
+		D737C4522C67A285006782BD /* TopButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4512C67A285006782BD /* TopButtonsView.swift */; };
+		D737C4552C67A369006782BD /* AlertData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4542C67A369006782BD /* AlertData.swift */; };
 		D76C58002C5F965800C20C6C /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = D76C57FF2C5F965800C20C6C /* english.json */; };
 		D76C58022C5F9CC900C20C6C /* utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58012C5F9CC900C20C6C /* utilities.swift */; };
 		D76C58042C64F12100C20C6C /* BlueRectangleThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58032C64F12100C20C6C /* BlueRectangleThumbnail.swift */; };
-		D76C58062C64F13D00C20C6C /* FullScreenBlueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58052C64F13D00C20C6C /* FullScreenBlueView.swift */; };
 		D76C58082C64F16000C20C6C /* DateFormatterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58072C64F16000C20C6C /* DateFormatterExtensions.swift */; };
 		D76C580B2C64F18300C20C6C /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C580A2C64F18300C20C6C /* ImageItem.swift */; };
 		D7747E6E2C54CEB600FA93D2 /* StudyWallApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7747E6D2C54CEB600FA93D2 /* StudyWallApp.swift */; };
@@ -46,10 +55,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D722C5982C6838C600211062 /* WordData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordData.swift; sourceTree = "<group>"; };
+		D722C59A2C6838EC00211062 /* Sentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sentence.swift; sourceTree = "<group>"; };
+		D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueViewModel.swift; sourceTree = "<group>"; };
+		D737C4472C67A14E006782BD /* FullScreenBlueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueView.swift; sourceTree = "<group>"; };
+		D737C4492C67A21E006782BD /* WordItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordItemView.swift; sourceTree = "<group>"; };
+		D737C44B2C67A235006782BD /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
+		D737C44D2C67A256006782BD /* TimeOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeOverlayView.swift; sourceTree = "<group>"; };
+		D737C44F2C67A26C006782BD /* ControlIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlIconsView.swift; sourceTree = "<group>"; };
+		D737C4512C67A285006782BD /* TopButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopButtonsView.swift; sourceTree = "<group>"; };
+		D737C4542C67A369006782BD /* AlertData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertData.swift; sourceTree = "<group>"; };
 		D76C57FF2C5F965800C20C6C /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		D76C58012C5F9CC900C20C6C /* utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utilities.swift; sourceTree = "<group>"; };
 		D76C58032C64F12100C20C6C /* BlueRectangleThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueRectangleThumbnail.swift; sourceTree = "<group>"; };
-		D76C58052C64F13D00C20C6C /* FullScreenBlueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueView.swift; sourceTree = "<group>"; };
 		D76C58072C64F16000C20C6C /* DateFormatterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtensions.swift; sourceTree = "<group>"; };
 		D76C580A2C64F18300C20C6C /* ImageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
 		D7747E6A2C54CEB600FA93D2 /* StudyWall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyWall.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +115,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D722C59C2C683A5200211062 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				D76C58012C5F9CC900C20C6C /* utilities.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		D737C4442C67A04A006782BD /* FullScreenBlue */ = {
+			isa = PBXGroup;
+			children = (
+				D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */,
+				D737C4472C67A14E006782BD /* FullScreenBlueView.swift */,
+				D737C4492C67A21E006782BD /* WordItemView.swift */,
+				D737C44B2C67A235006782BD /* IconButton.swift */,
+				D737C44D2C67A256006782BD /* TimeOverlayView.swift */,
+				D737C44F2C67A26C006782BD /* ControlIconsView.swift */,
+				D737C4512C67A285006782BD /* TopButtonsView.swift */,
+			);
+			path = FullScreenBlue;
+			sourceTree = "<group>";
+		};
 		D7747E612C54CEB600FA93D2 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +156,7 @@
 		D7747E6C2C54CEB600FA93D2 /* StudyWall */ = {
 			isa = PBXGroup;
 			children = (
+				D722C59C2C683A5200211062 /* Utilities */,
 				D7CE93652C5DF6C200063DE8 /* Info.plist */,
 				D7CE93162C5A52D500063DE8 /* Resources */,
 				D7747E7E2C54CF5200FA93D2 /* Views */,
@@ -123,7 +164,6 @@
 				D7747E6D2C54CEB600FA93D2 /* StudyWallApp.swift */,
 				D7747E712C54CEB700FA93D2 /* Assets.xcassets */,
 				D7747E732C54CEB700FA93D2 /* Preview Content */,
-				D76C58012C5F9CC900C20C6C /* utilities.swift */,
 			);
 			path = StudyWall;
 			sourceTree = "<group>";
@@ -139,6 +179,9 @@
 		D7747E7B2C54CF2B00FA93D2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D737C4542C67A369006782BD /* AlertData.swift */,
+				D722C5982C6838C600211062 /* WordData.swift */,
+				D722C59A2C6838EC00211062 /* Sentence.swift */,
 				D7CE93202C5A56BB00063DE8 /* Hike.swift */,
 				D7CE93222C5A56BB00063DE8 /* Landmark.swift */,
 				D7CE93212C5A56BB00063DE8 /* ModelData.swift */,
@@ -150,6 +193,7 @@
 		D7747E7E2C54CF5200FA93D2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D737C4442C67A04A006782BD /* FullScreenBlue */,
 				D7CE935B2C5B9DD500063DE8 /* Landmarks */,
 				D7CE933C2C5B98D400063DE8 /* Helpers */,
 				D7CE933B2C5B98BA00063DE8 /* Hikes */,
@@ -230,7 +274,6 @@
 			children = (
 				D7CE935E2C5B9E1100063DE8 /* LandmarkDetail.swift */,
 				D76C58032C64F12100C20C6C /* BlueRectangleThumbnail.swift */,
-				D76C58052C64F13D00C20C6C /* FullScreenBlueView.swift */,
 				D76C58072C64F16000C20C6C /* DateFormatterExtensions.swift */,
 				D76C580A2C64F18300C20C6C /* ImageItem.swift */,
 			);
@@ -341,20 +384,26 @@
 				D7CE93422C5B999D00063DE8 /* FavoriteButton.swift in Sources */,
 				D7CE93592C5B9D9E00063DE8 /* CategoryRow.swift in Sources */,
 				D7CE93412C5B999D00063DE8 /* CircleImage.swift in Sources */,
+				D737C4502C67A26C006782BD /* ControlIconsView.swift in Sources */,
 				D7CE93272C5A56BB00063DE8 /* Profile.swift in Sources */,
 				D7CE93402C5B999D00063DE8 /* MapView.swift in Sources */,
 				D7CE934A2C5B99A800063DE8 /* HikeDetail.swift in Sources */,
 				D7CE93372C5B968C00063DE8 /* ProfileEditor.swift in Sources */,
+				D722C5992C6838C600211062 /* WordData.swift in Sources */,
 				D7747E802C54CF6100FA93D2 /* ContentView.swift in Sources */,
 				D7747E6E2C54CEB600FA93D2 /* StudyWallApp.swift in Sources */,
 				D7CE93532C5B99B700063DE8 /* HikeBadge.swift in Sources */,
 				D76C58082C64F16000C20C6C /* DateFormatterExtensions.swift in Sources */,
+				D737C44A2C67A21E006782BD /* WordItemView.swift in Sources */,
+				D737C4552C67A369006782BD /* AlertData.swift in Sources */,
 				D7CE93252C5A56BB00063DE8 /* ModelData.swift in Sources */,
+				D722C59B2C6838EC00211062 /* Sentence.swift in Sources */,
 				D7CE93472C5B99A800063DE8 /* GraphCapsule.swift in Sources */,
+				D737C44E2C67A256006782BD /* TimeOverlayView.swift in Sources */,
 				D76C580B2C64F18300C20C6C /* ImageItem.swift in Sources */,
 				D7CE93492C5B99A800063DE8 /* HikeView.swift in Sources */,
 				D7CE93562C5B99B700063DE8 /* BadgeSymbol.swift in Sources */,
-				D76C58062C64F13D00C20C6C /* FullScreenBlueView.swift in Sources */,
+				D737C44C2C67A235006782BD /* IconButton.swift in Sources */,
 				D7CE93522C5B99B700063DE8 /* BadgeBackground.swift in Sources */,
 				D7CE93122C5A49E600063DE8 /* Home.swift in Sources */,
 				D7CE93392C5B968C00063DE8 /* ProfileSummary.swift in Sources */,
@@ -363,6 +412,9 @@
 				D7CE93542C5B99B700063DE8 /* HexagonParameters.swift in Sources */,
 				D7CE93612C5B9E1100063DE8 /* LandmarkDetail.swift in Sources */,
 				D7CE93482C5B99A800063DE8 /* HikeGraph.swift in Sources */,
+				D737C4462C67A0AE006782BD /* FullScreenBlueViewModel.swift in Sources */,
+				D737C4522C67A285006782BD /* TopButtonsView.swift in Sources */,
+				D737C4482C67A14E006782BD /* FullScreenBlueView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
