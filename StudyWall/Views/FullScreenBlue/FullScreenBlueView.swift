@@ -49,13 +49,20 @@ struct FullScreenBlueView: View {
             if viewModel.isLocked { ControlIconsView() }
 
             if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot {
-                TopButtonsView(
-                    isLocked: $viewModel.isLocked,
-                    hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                    captureScreenshot: viewModel.captureScreenshot,
-                    tapGestureEnabled: $viewModel.tapGestureEnabled,
-                    isFullScreen: $isFullScreen
-                )
+                TopButtonsView(isFullScreen: $isFullScreen)
+            }
+
+            // Add BottomButtonsView here
+            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot {
+                VStack {
+                    Spacer()
+                    BottomButtonsView(
+                        isLocked: $viewModel.isLocked,
+                        hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                        captureScreenshot: viewModel.captureScreenshot,
+                        tapGestureEnabled: $viewModel.tapGestureEnabled
+                    )
+                }
             }
         }
         .onAppear {
