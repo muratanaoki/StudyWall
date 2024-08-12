@@ -9,7 +9,7 @@ class FullScreenBlueViewModel: ObservableObject {
     @Published var showControlButtons: Bool = false
     @Published var tapGestureEnabled: Bool = false
     @Published var hideButtonsForScreenshot: Bool = false
-    @Published var areControlButtonsHidden: Bool = false  // 追加: コントロールボタンの表示・非表示を管理
+    @Published var areControlButtonsHidden: Bool = false  // コントロールボタンの表示・非表示を管理
 
     let speechSynthesizer = AVSpeechSynthesizer()
 
@@ -51,6 +51,21 @@ class FullScreenBlueViewModel: ObservableObject {
         }
     }
 
+    func toggleLock() {
+        withAnimation {
+            isLocked = true
+            areControlButtonsHidden = true
+            tapGestureEnabled = true
+        }
+    }
+
+    func unlock() {
+        withAnimation {
+            isLocked = false
+            areControlButtonsHidden = false
+            tapGestureEnabled = false
+        }
+    }
 
     private func saveImageToPhotos(_ image: UIImage, completion: @escaping (Bool) -> Void) {
         PHPhotoLibrary.requestAuthorization { status in

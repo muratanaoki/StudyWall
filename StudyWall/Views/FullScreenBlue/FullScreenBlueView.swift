@@ -37,11 +37,7 @@ struct FullScreenBlueView: View {
                 Color.clear
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        withAnimation {
-                            viewModel.showControlButtons = false
-                            viewModel.isLocked = false
-                            viewModel.tapGestureEnabled = false
-                        }
+                        viewModel.unlock()
                     }
             }
 
@@ -62,7 +58,7 @@ struct FullScreenBlueView: View {
                             viewModel.captureScreenshot()
                         },
                         tapGestureEnabled: $viewModel.tapGestureEnabled,
-                        areControlButtonsHidden: $viewModel.areControlButtonsHidden // ここを追加
+                        areControlButtonsHidden: $viewModel.areControlButtonsHidden
                     )
                 }
             }

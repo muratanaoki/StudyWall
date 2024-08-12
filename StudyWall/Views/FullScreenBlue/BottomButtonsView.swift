@@ -5,16 +5,15 @@ struct BottomButtonsView: View {
     @Binding var hideButtonsForScreenshot: Bool
     var captureScreenshot: () -> Void
     @Binding var tapGestureEnabled: Bool
-@Binding var areControlButtonsHidden: Bool  // 追加
+    @Binding var areControlButtonsHidden: Bool
 
     var body: some View {
         HStack {
-            if !areControlButtonsHidden {  // コントロールボタンが非表示でない場合にのみ表示
+            if !areControlButtonsHidden {
                 Button(action: {
-                    withAnimation {
-                        isLocked = true
-                        tapGestureEnabled = true
-                    }
+                    isLocked = true
+                    areControlButtonsHidden = true
+                    tapGestureEnabled = true
                 }) {
                     Image(systemName: "lock.iphone")
                         .font(.title)
@@ -23,7 +22,7 @@ struct BottomButtonsView: View {
                 .foregroundColor(.white)
             }
             Spacer()
-            if !areControlButtonsHidden {  // コントロールボタンが非表示でない場合にのみ表示
+            if !areControlButtonsHidden {
                 Button(action: {
                     hideButtonsForScreenshot = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -39,6 +38,6 @@ struct BottomButtonsView: View {
             }
         }
         .padding(.horizontal, 10)
-        .padding(.bottom, 20) // Bottom padding for better spacing
+        .padding(.bottom, 20)
     }
 }
