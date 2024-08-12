@@ -12,6 +12,11 @@ struct WordItemView: View {
                     .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Button(action: {
+                    // 現在再生中の音声を停止する
+                    if speechSynthesizer.isSpeaking {
+                        speechSynthesizer.stopSpeaking(at: .immediate)
+                    }
+                    // 新しい音声を再生する
                     let utterance = AVSpeechUtterance(string: wordData.word)
                     utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
                     speechSynthesizer.speak(utterance)
@@ -38,6 +43,11 @@ struct WordItemView: View {
                             .font(.caption)
                         Spacer()
                         Button(action: {
+                            // 現在再生中の音声を停止する
+                            if speechSynthesizer.isSpeaking {
+                                speechSynthesizer.stopSpeaking(at: .immediate)
+                            }
+                            // 新しい音声を再生する
                             let utterance = AVSpeechUtterance(string: sentence.english)
                             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
                             speechSynthesizer.speak(utterance)
