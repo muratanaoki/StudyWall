@@ -11,7 +11,6 @@ struct WordItemView: View {
             HStack {
                 Text(wordData.word)
                     .font(.subheadline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 if !isSpeakerButtonHidden {  // スピーカーボタンが非表示でない場合にのみ表示
                     Button(action: {
                         // 現在再生中の音声を停止する
@@ -30,11 +29,9 @@ struct WordItemView: View {
                 Text(wordData.pronunciation)
                     .font(.caption2)
                     .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 Text(wordData.translation)
                     .font(.caption)
                     .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.bottom, 3)
             Divider()
@@ -42,9 +39,6 @@ struct WordItemView: View {
             ForEach(wordData.sentences) { sentence in
                 VStack(alignment: .leading, spacing: 2) {
                     HStack {
-                        Text(sentence.english)
-                            .font(.caption)
-                        Spacer()
                         if !isSpeakerButtonHidden {  // スピーカーボタンが非表示でない場合にのみ表示
                             Button(action: {
                                 // 現在再生中の音声を停止する
@@ -60,6 +54,8 @@ struct WordItemView: View {
                                     .foregroundColor(.blue)
                             }
                         }
+                        Text(sentence.english)
+                            .font(.caption)
                     }
                     Text(sentence.japanese)
                         .font(.caption)

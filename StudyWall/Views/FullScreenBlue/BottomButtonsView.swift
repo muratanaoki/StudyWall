@@ -24,6 +24,37 @@ struct BottomButtonsView: View {
             Spacer()
             if !areControlButtonsHidden {
                 Button(action: {
+                }) {
+                    Image(systemName: "eye")
+                        .font(.title)
+                        .padding()
+                }
+                .foregroundColor(.white)
+            }
+            Spacer()
+            if !areControlButtonsHidden {
+                Button(action: {
+                }) {
+                    Image(systemName: "paintpalette")
+                        .font(.title)
+                        .padding()
+                }
+                .foregroundColor(.white)
+            }
+            Spacer()
+            if !areControlButtonsHidden {
+                Button(action: {
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.title)
+                        .padding()
+                }
+                .foregroundColor(.white)
+            }
+
+            Spacer()
+            if !areControlButtonsHidden {
+                Button(action: {
                     hideButtonsForScreenshot = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         captureScreenshot()
