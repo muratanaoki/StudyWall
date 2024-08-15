@@ -15,11 +15,13 @@ struct FullScreenBlueView: View {
                 TabView {
                     ForEach(0..<5, id: \.self) { _ in
                         VStack {
+                            if shouldShowHeaderView() {
+                                HeaderView()
+                            }
                             ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                WordItemView(wordData: wordsData[index], speechSynthesizer: viewModel.speechSynthesizer, isSpeakerButtonHidden: $viewModel.areControlButtonsHidden)
+                                WordItemView(wordData: wordsData[index], speechSynthesizer: viewModel.speechSynthesizer, areControlButtonsHidden: $viewModel.areControlButtonsHidden)
                             }
                         }
-                        .padding(.top, 20)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -33,38 +35,83 @@ struct FullScreenBlueView: View {
                 )
             }
 
-            if viewModel.tapGestureEnabled {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        viewModel.unlock()
-                    }
-            }
-
-            if viewModel.isLocked { TimeOverlayView(currentTime: viewModel.currentTime) }
-            if viewModel.isLocked { ControlIconsView() }
-
-            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden {
-                TopButtonsView(isFullScreen: $isFullScreen)
-            }
-
-            if !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden {
-                VStack {
-                    Spacer()
-                    BottomButtonsView(
-                        isLocked: $viewModel.isLocked,
-                        hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                        captureScreenshot: {
-                            viewModel.captureScreenshot()
-                        },
-                        tapGestureEnabled: $viewModel.tapGestureEnabled,
-                        areControlButtonsHidden: $viewModel.areControlButtonsHidden
-                    )
-                }
-            }
+            overlayViews()
         }
         .onAppear {
             viewModel.startClock()
         }
+    }
+
+    @ViewBuilder
+    private func overlayViews() -> some View {
+        if viewModel.tapGestureEnabled {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    viewModel.unlock()
+                }
+        }
+
+        if viewModel.isLocked {
+            TimeOverlayView(currentTime: viewModel.currentTime)
+            ControlIconsView()
+        }
+
+        if shouldShowControlButtons() {
+            TopButtonsView(isFullScreen: $isFullScreen)
+            VStack {
+                Spacer()
+                BottomButtonsView(
+                    isLocked: $viewModel.isLocked,
+                    hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                    captureScreenshot: {
+                        viewModel.captureScreenshot()
+                    },
+                    tapGestureEnabled: $viewModel.tapGestureEnabled,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden
+                )
+            }
+        }
+    }
+
+    private func shouldShowHeaderView() -> Bool {
+        return !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
+    }
+
+    private func shouldShowControlButtons() -> Bool {
+        return shouldShowHeaderView()
+    }
+}
+
+struct FullScreenBlueView_Previews: PreviewProvider {
+    @State static var selectedIndex = 0
+    @State static var isFullScreen: ImageItem? = nil
+
+    static var previews: some View {
+        FullScreenBlueView(
+            wordsData: [
+                WordData(
+                    word: "Example",
+                    translation: "例",
+                    pronunciation: "ɪɡˈzæmpəl",
+                    sentences: [
+                        Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                        Sentence(english: "Another example sentence.", japanese: "もう一つの例文です。")
+                    ]
+                ),
+                WordData(
+                    word: "Test",
+                    translation: "テスト",
+                    pronunciation: "tɛst",
+                    sentences: [
+                        Sentence(english: "This is a test sentence.", japanese: "これはテスト文です。"),
+                        Sentence(english: "Another test sentence.", japanese: "もう一つのテスト文です。")
+                    ]
+                )
+            ],
+            selectedIndex: $selectedIndex,
+            isFullScreen: $isFullScreen
+        )
+        .previewLayout(.device)
     }
 }

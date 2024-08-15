@@ -10,65 +10,52 @@ struct BottomButtonsView: View {
     var body: some View {
         HStack {
             if !areControlButtonsHidden {
-                Button(action: {
+                controlButton(iconName: "lock.iphone") {
                     isLocked = true
                     areControlButtonsHidden = true
                     tapGestureEnabled = true
-                }) {
-                    Image(systemName: "lock.iphone")
-                        .font(.title)
-                        .padding()
                 }
-                .foregroundColor(.white)
-            }
-            Spacer()
-            if !areControlButtonsHidden {
-                Button(action: {
-                }) {
-                    Image(systemName: "eye")
-                        .font(.title)
-                        .padding()
-                }
-                .foregroundColor(.white)
-            }
-            Spacer()
-            if !areControlButtonsHidden {
-                Button(action: {
-                }) {
-                    Image(systemName: "paintpalette")
-                        .font(.title)
-                        .padding()
-                }
-                .foregroundColor(.white)
-            }
-            Spacer()
-            if !areControlButtonsHidden {
-                Button(action: {
-                }) {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.title)
-                        .padding()
-                }
-                .foregroundColor(.white)
-            }
 
-            Spacer()
-            if !areControlButtonsHidden {
-                Button(action: {
+                Spacer()
+
+                controlButton(iconName: "eye") {
+                    // ここに必要なアクションを追加
+                }
+
+                Spacer()
+
+                controlButton(iconName: "paintpalette") {
+                    // ここに必要なアクションを追加
+                }
+
+                Spacer()
+
+                controlButton(iconName: "square.and.arrow.up") {
+                    // ここに必要なアクションを追加
+                }
+
+                Spacer()
+
+                controlButton(iconName: "square.and.arrow.down") {
                     hideButtonsForScreenshot = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         captureScreenshot()
                         hideButtonsForScreenshot = false
                     }
-                }) {
-                    Image(systemName: "square.and.arrow.down")
-                        .font(.title)
-                        .padding()
                 }
-                .foregroundColor(.white)
             }
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 20)
+    }
+
+    // 共通のボタンを作成するヘルパーメソッド
+    private func controlButton(iconName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: iconName)
+                .font(.title)
+                .padding()
+        }
+        .foregroundColor(.white)
     }
 }

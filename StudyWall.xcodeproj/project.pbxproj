@@ -10,6 +10,8 @@
 		D722C5992C6838C600211062 /* WordData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5982C6838C600211062 /* WordData.swift */; };
 		D722C59B2C6838EC00211062 /* Sentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C59A2C6838EC00211062 /* Sentence.swift */; };
 		D722C59E2C6A37C400211062 /* BottomButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C59D2C6A37C400211062 /* BottomButtonsView.swift */; };
+		D722C5A02C6CBDE700211062 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C59F2C6CBDE700211062 /* CheckboxStyle.swift */; };
+		D722C5A22C6E1BB700211062 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5A12C6E1BB700211062 /* HeaderView.swift */; };
 		D737C4462C67A0AE006782BD /* FullScreenBlueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */; };
 		D737C4482C67A14E006782BD /* FullScreenBlueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4472C67A14E006782BD /* FullScreenBlueView.swift */; };
 		D737C44A2C67A21E006782BD /* WordItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4492C67A21E006782BD /* WordItemView.swift */; };
@@ -59,6 +61,8 @@
 		D722C5982C6838C600211062 /* WordData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordData.swift; sourceTree = "<group>"; };
 		D722C59A2C6838EC00211062 /* Sentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sentence.swift; sourceTree = "<group>"; };
 		D722C59D2C6A37C400211062 /* BottomButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtonsView.swift; sourceTree = "<group>"; };
+		D722C59F2C6CBDE700211062 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
+		D722C5A12C6E1BB700211062 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueViewModel.swift; sourceTree = "<group>"; };
 		D737C4472C67A14E006782BD /* FullScreenBlueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueView.swift; sourceTree = "<group>"; };
 		D737C4492C67A21E006782BD /* WordItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordItemView.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				D737C44F2C67A26C006782BD /* ControlIconsView.swift */,
 				D737C4512C67A285006782BD /* TopButtonsView.swift */,
 				D722C59D2C6A37C400211062 /* BottomButtonsView.swift */,
+				D722C5A12C6E1BB700211062 /* HeaderView.swift */,
 			);
 			path = FullScreenBlue;
 			sourceTree = "<group>";
@@ -268,6 +273,7 @@
 				D7CE933E2C5B999D00063DE8 /* CircleImage.swift */,
 				D7CE933F2C5B999D00063DE8 /* FavoriteButton.swift */,
 				D7CE933D2C5B999D00063DE8 /* MapView.swift */,
+				D722C59F2C6CBDE700211062 /* CheckboxStyle.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -400,12 +406,14 @@
 				D737C44A2C67A21E006782BD /* WordItemView.swift in Sources */,
 				D737C4552C67A369006782BD /* AlertData.swift in Sources */,
 				D7CE93252C5A56BB00063DE8 /* ModelData.swift in Sources */,
+				D722C5A22C6E1BB700211062 /* HeaderView.swift in Sources */,
 				D722C59B2C6838EC00211062 /* Sentence.swift in Sources */,
 				D7CE93472C5B99A800063DE8 /* GraphCapsule.swift in Sources */,
 				D737C44E2C67A256006782BD /* TimeOverlayView.swift in Sources */,
 				D722C59E2C6A37C400211062 /* BottomButtonsView.swift in Sources */,
 				D76C580B2C64F18300C20C6C /* ImageItem.swift in Sources */,
 				D7CE93492C5B99A800063DE8 /* HikeView.swift in Sources */,
+				D722C5A02C6CBDE700211062 /* CheckboxStyle.swift in Sources */,
 				D7CE93562C5B99B700063DE8 /* BadgeSymbol.swift in Sources */,
 				D737C44C2C67A235006782BD /* IconButton.swift in Sources */,
 				D7CE93522C5B99B700063DE8 /* BadgeBackground.swift in Sources */,
