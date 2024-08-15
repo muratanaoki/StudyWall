@@ -9,7 +9,9 @@ class FullScreenBlueViewModel: ObservableObject {
     @Published var showControlButtons: Bool = false
     @Published var tapGestureEnabled: Bool = false
     @Published var hideButtonsForScreenshot: Bool = false
-    @Published var areControlButtonsHidden: Bool = false  // コントロールボタンの表示・非表示を管理
+    @Published var areControlButtonsHidden: Bool = false
+    @Published var showColorPicker: Bool = false // カラーピッカーの表示状態を管理
+    @Published var selectedColor: Color = .blue // 選択された色を保持
 
     let speechSynthesizer = AVSpeechSynthesizer()
 
@@ -20,10 +22,8 @@ class FullScreenBlueViewModel: ObservableObject {
     }
 
     func captureScreenshot() {
-        // コントロールボタンを非表示にする
         areControlButtonsHidden = true
 
-        // 0.1秒後にスクリーンショットを撮影
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
             let screenBounds = window.bounds
@@ -32,10 +32,8 @@ class FullScreenBlueViewModel: ObservableObject {
             let screenshot = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
 
-            // コントロールボタンを再表示する
             self.areControlButtonsHidden = false
 
-            // スクリーンショットを保存
             if let screenshot = screenshot {
                 self.saveImageToPhotos(screenshot) { success in
                     if success {

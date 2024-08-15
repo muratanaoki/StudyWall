@@ -8,7 +8,7 @@ struct FullScreenBlueView: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Color.blue
+            viewModel.selectedColor
                 .ignoresSafeArea()
 
             VStack(spacing: 5) {
@@ -68,7 +68,8 @@ struct FullScreenBlueView: View {
                         viewModel.captureScreenshot()
                     },
                     tapGestureEnabled: $viewModel.tapGestureEnabled,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    selectedColor: $viewModel.selectedColor // 選択された色
                 )
             }
         }
@@ -80,38 +81,5 @@ struct FullScreenBlueView: View {
 
     private func shouldShowControlButtons() -> Bool {
         return shouldShowHeaderView()
-    }
-}
-
-struct FullScreenBlueView_Previews: PreviewProvider {
-    @State static var selectedIndex = 0
-    @State static var isFullScreen: ImageItem? = nil
-
-    static var previews: some View {
-        FullScreenBlueView(
-            wordsData: [
-                WordData(
-                    word: "Example",
-                    translation: "例",
-                    pronunciation: "ɪɡˈzæmpəl",
-                    sentences: [
-                        Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
-                        Sentence(english: "Another example sentence.", japanese: "もう一つの例文です。")
-                    ]
-                ),
-                WordData(
-                    word: "Test",
-                    translation: "テスト",
-                    pronunciation: "tɛst",
-                    sentences: [
-                        Sentence(english: "This is a test sentence.", japanese: "これはテスト文です。"),
-                        Sentence(english: "Another test sentence.", japanese: "もう一つのテスト文です。")
-                    ]
-                )
-            ],
-            selectedIndex: $selectedIndex,
-            isFullScreen: $isFullScreen
-        )
-        .previewLayout(.device)
     }
 }
