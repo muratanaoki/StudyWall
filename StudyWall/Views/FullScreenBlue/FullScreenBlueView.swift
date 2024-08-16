@@ -62,15 +62,16 @@ struct FullScreenBlueView: View {
             VStack {
                 Spacer()
                 BottomButtonsView(
-                    isLocked: $viewModel.isLocked,
-                    hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                    captureScreenshot: {
-                        viewModel.captureScreenshot()
-                    },
-                    tapGestureEnabled: $viewModel.tapGestureEnabled,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    selectedColor: $viewModel.selectedColor // 選択された色
-                )
+                        isLocked: $viewModel.isLocked,
+                        hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                        captureScreenshot: {
+                            viewModel.captureScreenshot()
+                        },
+                        tapGestureEnabled: $viewModel.tapGestureEnabled,
+                        areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                        selectedColor: $viewModel.selectedColor,
+                        viewModel: viewModel // ViewModelを渡す
+                    )
             }
         }
     }

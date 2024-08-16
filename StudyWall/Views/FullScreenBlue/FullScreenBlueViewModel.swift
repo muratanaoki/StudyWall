@@ -10,8 +10,9 @@ class FullScreenBlueViewModel: ObservableObject {
     @Published var tapGestureEnabled: Bool = false
     @Published var hideButtonsForScreenshot: Bool = false
     @Published var areControlButtonsHidden: Bool = false
-    @Published var showColorPicker: Bool = false // カラーピッカーの表示状態を管理
-    @Published var selectedColor: Color = .blue // 選択された色を保持
+    @Published var showColorPicker: Bool = false
+    @Published var selectedColor: Color = .blue
+    @Published var isEyeOpen: Bool = true // アイコンの状態を管理
 
     let speechSynthesizer = AVSpeechSynthesizer()
 
@@ -63,6 +64,10 @@ class FullScreenBlueViewModel: ObservableObject {
             areControlButtonsHidden = false
             tapGestureEnabled = false
         }
+    }
+
+    func toggleEyeIcon() {
+        isEyeOpen.toggle()
     }
 
     private func saveImageToPhotos(_ image: UIImage, completion: @escaping (Bool) -> Void) {

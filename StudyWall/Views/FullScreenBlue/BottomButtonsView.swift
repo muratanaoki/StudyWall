@@ -6,7 +6,8 @@ struct BottomButtonsView: View {
     var captureScreenshot: () -> Void
     @Binding var tapGestureEnabled: Bool
     @Binding var areControlButtonsHidden: Bool
-    @Binding var selectedColor: Color // 選択された色
+    @Binding var selectedColor: Color
+    @ObservedObject var viewModel: FullScreenBlueViewModel // ViewModelを渡す
 
     var body: some View {
         VStack {
@@ -20,28 +21,26 @@ struct BottomButtonsView: View {
 
                     Spacer()
 
-                    controlButton(iconName: "eye") {
-                        // ここに必要なアクションを追加
+                    controlButton(iconName: viewModel.isEyeOpen ? "eye" : "eye.slash") {
+                        viewModel.toggleEyeIcon()
                     }
 
                     Spacer()
 
                     ZStack {
-                        // カスタムのpaintpaletteボタンを上に配置
                         Button(action: {
-                            // このボタンが透明なColorPickerをクリック
+                            // カスタムのpaintpaletteボタンのアクション
                         }) {
                             Image(systemName: "paintpalette")
                                 .font(.title)
                                 .foregroundColor(.white)
                         }
-                        // ColorPicker本体のラベルを隠して透明に設定
                         ColorPicker("", selection: $selectedColor, supportsOpacity: true)
-                            .labelsHidden()  // ラベルを非表示
-                            .frame(width: 44, height: 44) // ボタンの大きさに合わせる
-                            .opacity(0.02) // 完全に透明に近いが、クリックを許可する
-                            .background(Color.clear) // 背景色を透明に設定
-                            .allowsHitTesting(true) // 透明でもヒットテストを許可
+                            .labelsHidden()
+                            .frame(width: 44, height: 44)
+                            .opacity(0.02)
+                            .background(Color.clear)
+                            .allowsHitTesting(true)
                     }
 
                     Spacer()
