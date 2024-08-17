@@ -7,7 +7,10 @@ struct BottomButtonsView: View {
     @Binding var tapGestureEnabled: Bool
     @Binding var areControlButtonsHidden: Bool
     @Binding var selectedColor: Color
+
     @ObservedObject var viewModel: FullScreenBlueViewModel // ViewModelを渡す
+
+    let scalingFactor: CGFloat
 
     var body: some View {
         VStack {
@@ -32,12 +35,14 @@ struct BottomButtonsView: View {
                             // カスタムのpaintpaletteボタンのアクション
                         }) {
                             Image(systemName: "paintpalette")
-                                .font(.title)
+                                .resizable()  // サイズを変更可能にする
+                                .aspectRatio(contentMode: .fit)  // アスペクト比を保つ
+                                .frame(width: 30 * scalingFactor, height: 30 * scalingFactor)  // スケーリングに対応
                                 .foregroundColor(.white)
                         }
                         ColorPicker("", selection: $selectedColor, supportsOpacity: true)
                             .labelsHidden()
-                            .frame(width: 44, height: 44)
+                            .frame(width: 44 * scalingFactor, height: 44 * scalingFactor)
                             .opacity(0.02)
                             .background(Color.clear)
                             .allowsHitTesting(true)
@@ -53,8 +58,8 @@ struct BottomButtonsView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 10)
-                .padding(.bottom, 20)
+                .padding(.horizontal, 10 * scalingFactor)
+                .padding(.bottom, 10 * scalingFactor)
             }
         }
     }
@@ -62,8 +67,10 @@ struct BottomButtonsView: View {
     private func controlButton(iconName: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: iconName)
-                .font(.title)
-                .padding()
+                .resizable()  // サイズを変更可能にする
+                .aspectRatio(contentMode: .fit)  // アスペクト比を保つ
+                .frame(width: 30 * scalingFactor, height: 30 * scalingFactor)  // スケーリングに対応
+                .padding(10 * scalingFactor)  // パディングもスケーリングに対応
         }
         .foregroundColor(.white)
     }

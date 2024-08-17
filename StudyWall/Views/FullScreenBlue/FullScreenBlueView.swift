@@ -7,43 +7,63 @@ struct FullScreenBlueView: View {
     @StateObject private var viewModel = FullScreenBlueViewModel()
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            viewModel.selectedColor
-                .ignoresSafeArea()
+        ResponsiveContainer { scalingFactor in
+            ZStack(alignment: .topTrailing) {
+                viewModel.selectedColor
+                    .ignoresSafeArea()
 
-            VStack(spacing: 5) {
-                TabView {
-                    ForEach(0..<5, id: \.self) { _ in
-                        VStack {
-                            if shouldShowHeaderView() {
-                                HeaderView()
-                            }
-                            ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                WordItemView(wordData: wordsData[index], speechSynthesizer: viewModel.speechSynthesizer, areControlButtonsHidden: $viewModel.areControlButtonsHidden)
+                VStack(spacing: 5) {
+                    TabView {
+                        ForEach(0..<5, id: \.self) { _ in
+                            VStack {
+                                if shouldShowHeaderView() {
+                                    HeaderView(scalingFactor: scalingFactor)
+                                }
+
+                                if viewModel.isEyeOpen {
+                                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                                        WordItemView(
+                                            wordData: wordsData[index],
+                                            speechSynthesizer: viewModel.speechSynthesizer,
+                                            areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                                            scalingFactor: scalingFactor
+                                        )
+                                    }
+                                } else {
+                                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                                        HideWordItemView(
+                                            wordData: wordsData[index],
+                                            speechSynthesizer: viewModel.speechSynthesizer,
+                                            areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                                            scalingFactor: scalingFactor
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            }
-            .frame(maxHeight: .infinity)
-            .alert(isPresented: $viewModel.alertData.isPresented) {
-                Alert(
-                    title: Text(viewModel.alertData.title),
-                    message: Text(viewModel.alertData.message),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+                .frame(maxHeight: .infinity)
+                .alert(isPresented: $viewModel.alertData.isPresented) {
+                    Alert(
+                        title: Text(viewModel.alertData.title),
+                        message: Text(viewModel.alertData.message),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
 
-            overlayViews()
-        }
-        .onAppear {
-            viewModel.startClock()
+                overlayViews(scalingFactor:scalingFactor)
+            }
+            .onAppear {
+                viewModel.startClock()
+            }
         }
     }
 
     @ViewBuilder
-    private func overlayViews() -> some View {
+    private func overlayViews(scalingFactor:CGFloat) -> some View {
+
         if viewModel.tapGestureEnabled {
             Color.clear
                 .contentShape(Rectangle())
@@ -58,20 +78,20 @@ struct FullScreenBlueView: View {
         }
 
         if shouldShowControlButtons() {
-            TopButtonsView(isFullScreen: $isFullScreen)
+            TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
             VStack {
                 Spacer()
                 BottomButtonsView(
-                        isLocked: $viewModel.isLocked,
-                        hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                        captureScreenshot: {
-                            viewModel.captureScreenshot()
-                        },
-                        tapGestureEnabled: $viewModel.tapGestureEnabled,
-                        areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                        selectedColor: $viewModel.selectedColor,
-                        viewModel: viewModel // ViewModelを渡す
-                    )
+                    isLocked: $viewModel.isLocked,
+                    hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                    captureScreenshot: {
+                        viewModel.captureScreenshot()
+                    },
+                    tapGestureEnabled: $viewModel.tapGestureEnabled,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    selectedColor: $viewModel.selectedColor,
+                    viewModel: viewModel, scalingFactor: scalingFactor
+                )
             }
         }
     }
@@ -82,5 +102,32 @@ struct FullScreenBlueView: View {
 
     private func shouldShowControlButtons() -> Bool {
         return shouldShowHeaderView()
+    }
+}
+
+struct FullScreenBlueView_Previews: PreviewProvider {
+    @State static var selectedIndex = 0
+    @State static var isFullScreen: ImageItem? = nil
+
+    static var previews: some View {
+        let sampleWordData = WordData(
+            word: "Example",
+            translation: "例",
+            pronunciation: "ɪɡˈzæmpəl",
+            sentences: [
+                Sentence(english: "This is an example sentence.", japanese: "これは例文です。"),
+                Sentence(english: "Another example sentence.", japanese: "もう一つの例文です。")
+            ]
+        )
+
+        let wordsData = Array(repeating: sampleWordData, count: 5) // 同じデータを5回繰り返し
+
+        return FullScreenBlueView(
+            wordsData: wordsData,
+            selectedIndex: $selectedIndex,
+            isFullScreen: $isFullScreen
+        )
+        .previewDevice("iPhone 12") // iPhone 12でのプレビュー
+        .previewDisplayName("Full Screen Blue View with 5 WordData")
     }
 }

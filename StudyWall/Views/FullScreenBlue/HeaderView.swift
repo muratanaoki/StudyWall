@@ -1,19 +1,22 @@
 import SwiftUI
 
 struct HeaderView: View {
+    let scalingFactor: CGFloat
+
     var body: some View {
-        HStack() {
+        HStack {
             Text("単語")
-                .font(.headline)
+                .font(.system(size: 18 * scalingFactor))  // スケーリングに対応
             Spacer()
-            Text("|") .font(.headline)
+            Text("|")
+                .font(.system(size: 18 * scalingFactor))  // スケーリングに対応
             Text("復習")
-                .font(.headline)
+                .font(.system(size: 18 * scalingFactor))  // スケーリングに対応
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 10)
-        .background(.white)
-        .cornerRadius(10)
-        .padding(.horizontal, 8)
+        .padding(.horizontal, 8 * scalingFactor)
+        .padding(.vertical, 10 * scalingFactor)
+        .background(Color.white)
+        .cornerRadius(10 * scalingFactor)
+        .padding(.horizontal, 8 * scalingFactor)
     }
 }
