@@ -34,28 +34,16 @@ struct FullScreenContentView: View {
             viewModel.selectedColor
                 .ignoresSafeArea()  // 背景色を全画面に適用する
 
-                        Image("lock")
-                            .resizable()          // 画像をリサイズ可能にする
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)  // 画面全体に広げる
-                            .clipped()            // 画面サイズを超える部分を切り取る
-                            .ignoresSafeArea()    // Safe areaを無視して表示する
+            Image("lock")
+                .resizable()          // 画像をリサイズ可能にする
+                .frame(maxWidth: .infinity, maxHeight: .infinity)  // 画面全体に広げる
+                .clipped()            // 画面サイズを超える部分を切り取る
+                .ignoresSafeArea()    // Safe areaを無視して表示する
 
             VStack(spacing: 5) {
-                // 単語のスワイプビューを作成
-                TabView {
-                    ForEach(0..<5, id: \.self) { _ in
-                        VStack {
-                            if shouldShowHeaderView() {
-                                HeaderView(scalingFactor: scalingFactor)  // ヘッダービューを表示
-                            }
-                            // 単語項目を表示
-                            displayWordItems(isEyeOpen: viewModel.isEyeOpen, scalingFactor: scalingFactor)
-                        }
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))  // ページインジケータを非表示にする
+                WordSwipeView(wordsData: wordsData, scalingFactor: scalingFactor, viewModel: viewModel)
             }
-            .frame(maxHeight: .infinity)  // 最大高さを設定
+            .frame(maxHeight: .infinity)
             .alert(isPresented: $viewModel.alertData.isPresented) {
                 // アラートの表示
                 Alert(
@@ -70,31 +58,6 @@ struct FullScreenContentView: View {
         }
         .onAppear {
             viewModel.startClock()  // ビューが表示されたときにクロックを開始
-        }
-    }
-
-    /// 単語項目を表示するためのビルダー関数
-    @ViewBuilder
-    private func displayWordItems(isEyeOpen: Bool, scalingFactor: CGFloat) -> some View {
-        // 単語データをリストとして表示
-        ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-            if isEyeOpen {
-                // アイコンが開いている場合のビュー
-                WordItemView(
-                    wordData: wordsData[index],
-                    speechSynthesizer: viewModel.speechSynthesizer,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    scalingFactor: scalingFactor
-                )
-            } else {
-                // アイコンが閉じている場合のビュー
-                HideWordItemView(
-                    wordData: wordsData[index],
-                    speechSynthesizer: viewModel.speechSynthesizer,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    scalingFactor: scalingFactor
-                )
-            }
         }
     }
 
@@ -117,7 +80,7 @@ struct FullScreenContentView: View {
         }
 
         // ヘッダービューを表示する条件が満たされている場合
-        if shouldShowHeaderView() {
+        if shouldShowHeaderView {
             VStack {
                 TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
                 Spacer()
@@ -138,12 +101,59 @@ struct FullScreenContentView: View {
     }
 
     /// ヘッダービューを表示するかどうかの条件をチェックする関数
-    private func shouldShowHeaderView() -> Bool {
+    private var shouldShowHeaderView: Bool {
         !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
     }
 }
 
-/// プレビュー用の構造体。iPhone 12デバイスでのプレビューを提供。
+/// 単語をスワイプして表示するビュー
+struct WordSwipeView: View {
+    let wordsData: [WordData]
+    let scalingFactor: CGFloat
+    @ObservedObject var viewModel: FullScreenBlueViewModel
+
+    var body: some View {
+        TabView {
+            ForEach(0..<5, id: \.self) { _ in
+                VStack {
+                    if shouldShowHeaderView {
+                        HeaderView(scalingFactor: scalingFactor)
+                    }
+                    displayWordItems()
+                }
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    }
+
+    /// 単語項目を表示するためのビルダー関数
+    @ViewBuilder
+    private func displayWordItems() -> some View {
+        ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+            if viewModel.isEyeOpen {
+                WordItemView(
+                    wordData: wordsData[index],
+                    speechSynthesizer: viewModel.speechSynthesizer,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    scalingFactor: scalingFactor
+                )
+            } else {
+                HideWordItemView(
+                    wordData: wordsData[index],
+                    speechSynthesizer: viewModel.speechSynthesizer,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    scalingFactor: scalingFactor
+                )
+            }
+        }
+    }
+
+    /// ヘッダービューを表示するかどうかの条件をチェックする関数
+    private var shouldShowHeaderView: Bool {
+        !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
+    }
+}
+
 struct FullScreenBlueView_Previews: PreviewProvider {
     @State static var selectedIndex = 0
     @State static var isFullScreen: ImageItem? = nil
