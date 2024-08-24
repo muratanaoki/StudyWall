@@ -10,6 +10,5 @@ struct ResponsiveContainer<Content: View>: View {
             let scalingFactor = ResponsiveSettings.calculateScalingFactor(deviceWidth: width, deviceHeight: height)
             content(scalingFactor)
         }
-//        .edgesIgnoringSafeArea(.all)
     }
 }

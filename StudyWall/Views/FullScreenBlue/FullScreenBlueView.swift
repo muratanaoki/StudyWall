@@ -1,5 +1,7 @@
 import SwiftUI
 
+import SwiftUI
+
 struct FullScreenBlueView: View {
     let wordsData: [WordData]
     @Binding var selectedIndex: Int
@@ -7,68 +9,88 @@ struct FullScreenBlueView: View {
     @StateObject private var viewModel = FullScreenBlueViewModel()
 
     var body: some View {
-        ResponsiveContainer { scalingFactor in
-            ZStack(alignment: .topTrailing) {
-                viewModel.selectedColor
-                    .ignoresSafeArea()
+        ResponsiveContainer { scalingFactor in // 上位で一度だけResponsiveContainerを使用
+            FullScreenContentView(
+                wordsData: wordsData,
+                selectedIndex: $selectedIndex,
+                isFullScreen: $isFullScreen,
+                viewModel: viewModel,
+                scalingFactor: scalingFactor // scalingFactorを渡す
+            )
+        }
+    }
+}
 
-                VStack(spacing: 5) {
-                    TabView {
-                        ForEach(0..<5, id: \.self) { _ in
-                            VStack {
-                                if shouldShowHeaderView() {
-                                    HeaderView(scalingFactor: scalingFactor)
-                                }
+struct FullScreenContentView: View {
+    let wordsData: [WordData]
+    @Binding var selectedIndex: Int
+    @Binding var isFullScreen: ImageItem?
+    @ObservedObject var viewModel: FullScreenBlueViewModel
+    let scalingFactor: CGFloat
 
-                                if viewModel.isEyeOpen {
-                                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                        WordItemView(
-                                            wordData: wordsData[index],
-                                            speechSynthesizer: viewModel.speechSynthesizer,
-                                            areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                                            scalingFactor: scalingFactor
-                                        )
-                                    }
-                                } else {
-                                    ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-                                        HideWordItemView(
-                                            wordData: wordsData[index],
-                                            speechSynthesizer: viewModel.speechSynthesizer,
-                                            areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                                            scalingFactor: scalingFactor
-                                        )
-                                    }
-                                }
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            viewModel.selectedColor
+                .ignoresSafeArea()
+
+            VStack(spacing: 5) {
+                TabView {
+                    ForEach(0..<5, id: \.self) { _ in
+                        VStack {
+                            if shouldShowHeaderView() {
+                                HeaderView(scalingFactor: scalingFactor)
                             }
+
+                            displayWordItems(isEyeOpen: viewModel.isEyeOpen, scalingFactor: scalingFactor)
                         }
                     }
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
-                .frame(maxHeight: .infinity)
-                .alert(isPresented: $viewModel.alertData.isPresented) {
-                    Alert(
-                        title: Text(viewModel.alertData.title),
-                        message: Text(viewModel.alertData.message),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
-
-                overlayViews(scalingFactor:scalingFactor)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-            .onAppear {
-                viewModel.startClock()
+            .frame(maxHeight: .infinity)
+            .alert(isPresented: $viewModel.alertData.isPresented) {
+                Alert(
+                    title: Text(viewModel.alertData.title),
+                    message: Text(viewModel.alertData.message),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+
+            overlayViews(scalingFactor: scalingFactor)
+        }
+        .onAppear {
+            viewModel.startClock()
+        }
+    }
+
+    @ViewBuilder
+    private func displayWordItems(isEyeOpen: Bool, scalingFactor: CGFloat) -> some View {
+        ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+            if isEyeOpen {
+                WordItemView(
+                    wordData: wordsData[index],
+                    speechSynthesizer: viewModel.speechSynthesizer,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    scalingFactor: scalingFactor
+                )
+            } else {
+                HideWordItemView(
+                    wordData: wordsData[index],
+                    speechSynthesizer: viewModel.speechSynthesizer,
+                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
+                    scalingFactor: scalingFactor
+                )
             }
         }
     }
 
     @ViewBuilder
-    private func overlayViews(scalingFactor:CGFloat) -> some View {
-
+    private func overlayViews(scalingFactor: CGFloat) -> some View {
         if viewModel.tapGestureEnabled {
             Color.clear
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    viewModel.unlock()
+                    viewModel.toggleLock() // ロック状態の切り替え
                 }
         }
 
@@ -77,9 +99,9 @@ struct FullScreenBlueView: View {
             ControlIconsView()
         }
 
-        if shouldShowControlButtons() {
-            TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
+        if shouldShowHeaderView() {
             VStack {
+                TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
                 Spacer()
                 BottomButtonsView(
                     isLocked: $viewModel.isLocked,
@@ -90,20 +112,18 @@ struct FullScreenBlueView: View {
                     tapGestureEnabled: $viewModel.tapGestureEnabled,
                     areControlButtonsHidden: $viewModel.areControlButtonsHidden,
                     selectedColor: $viewModel.selectedColor,
-                    viewModel: viewModel, scalingFactor: scalingFactor
+                    viewModel: viewModel,
+                    scalingFactor: scalingFactor
                 )
             }
         }
     }
 
     private func shouldShowHeaderView() -> Bool {
-        return !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
-    }
-
-    private func shouldShowControlButtons() -> Bool {
-        return shouldShowHeaderView()
+        !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
     }
 }
+
 
 struct FullScreenBlueView_Previews: PreviewProvider {
     @State static var selectedIndex = 0
