@@ -14,9 +14,6 @@
 		D722C5A22C6E1BB700211062 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5A12C6E1BB700211062 /* HeaderView.swift */; };
 		D722C5A62C6F6EA100211062 /* HideWordItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5A52C6F6EA100211062 /* HideWordItemView.swift */; };
 		D722C5A82C6F77F700211062 /* ResponsiveSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5A72C6F77F700211062 /* ResponsiveSettings.swift */; };
-		D722C5AA2C6F783300211062 /* ResponsiveFontModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5A92C6F783300211062 /* ResponsiveFontModifier.swift */; };
-		D722C5AC2C6F784D00211062 /* ResponsiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5AB2C6F784D00211062 /* ResponsiveStack.swift */; };
-		D722C5AE2C6F786300211062 /* ResponsivePaddingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5AD2C6F786300211062 /* ResponsivePaddingModifier.swift */; };
 		D722C5B22C706FFA00211062 /* ResponsiveContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D722C5B12C706FFA00211062 /* ResponsiveContainer.swift */; };
 		D737C4462C67A0AE006782BD /* FullScreenBlueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */; };
 		D737C4482C67A14E006782BD /* FullScreenBlueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4472C67A14E006782BD /* FullScreenBlueView.swift */; };
@@ -71,9 +68,6 @@
 		D722C5A12C6E1BB700211062 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		D722C5A52C6F6EA100211062 /* HideWordItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideWordItemView.swift; sourceTree = "<group>"; };
 		D722C5A72C6F77F700211062 /* ResponsiveSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveSettings.swift; sourceTree = "<group>"; };
-		D722C5A92C6F783300211062 /* ResponsiveFontModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveFontModifier.swift; sourceTree = "<group>"; };
-		D722C5AB2C6F784D00211062 /* ResponsiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveStack.swift; sourceTree = "<group>"; };
-		D722C5AD2C6F786300211062 /* ResponsivePaddingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsivePaddingModifier.swift; sourceTree = "<group>"; };
 		D722C5B12C706FFA00211062 /* ResponsiveContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveContainer.swift; sourceTree = "<group>"; };
 		D737C4452C67A0AE006782BD /* FullScreenBlueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueViewModel.swift; sourceTree = "<group>"; };
 		D737C4472C67A14E006782BD /* FullScreenBlueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBlueView.swift; sourceTree = "<group>"; };
@@ -288,9 +282,6 @@
 				D7CE933D2C5B999D00063DE8 /* MapView.swift */,
 				D722C59F2C6CBDE700211062 /* CheckboxStyle.swift */,
 				D722C5A72C6F77F700211062 /* ResponsiveSettings.swift */,
-				D722C5A92C6F783300211062 /* ResponsiveFontModifier.swift */,
-				D722C5AB2C6F784D00211062 /* ResponsiveStack.swift */,
-				D722C5AD2C6F786300211062 /* ResponsivePaddingModifier.swift */,
 				D722C5B12C706FFA00211062 /* ResponsiveContainer.swift */,
 			);
 			path = Helpers;
@@ -416,7 +407,6 @@
 				D722C5A82C6F77F700211062 /* ResponsiveSettings.swift in Sources */,
 				D7CE93402C5B999D00063DE8 /* MapView.swift in Sources */,
 				D7CE934A2C5B99A800063DE8 /* HikeDetail.swift in Sources */,
-				D722C5AE2C6F786300211062 /* ResponsivePaddingModifier.swift in Sources */,
 				D7CE93372C5B968C00063DE8 /* ProfileEditor.swift in Sources */,
 				D722C5992C6838C600211062 /* WordData.swift in Sources */,
 				D7747E802C54CF6100FA93D2 /* ContentView.swift in Sources */,
@@ -427,7 +417,6 @@
 				D737C4552C67A369006782BD /* AlertData.swift in Sources */,
 				D722C5B22C706FFA00211062 /* ResponsiveContainer.swift in Sources */,
 				D7CE93252C5A56BB00063DE8 /* ModelData.swift in Sources */,
-				D722C5AC2C6F784D00211062 /* ResponsiveStack.swift in Sources */,
 				D722C5A22C6E1BB700211062 /* HeaderView.swift in Sources */,
 				D722C59B2C6838EC00211062 /* Sentence.swift in Sources */,
 				D7CE93472C5B99A800063DE8 /* GraphCapsule.swift in Sources */,
@@ -440,7 +429,6 @@
 				D737C44C2C67A235006782BD /* IconButton.swift in Sources */,
 				D7CE93522C5B99B700063DE8 /* BadgeBackground.swift in Sources */,
 				D7CE93122C5A49E600063DE8 /* Home.swift in Sources */,
-				D722C5AA2C6F783300211062 /* ResponsiveFontModifier.swift in Sources */,
 				D7CE93392C5B968C00063DE8 /* ProfileSummary.swift in Sources */,
 				D7CE93262C5A56BB00063DE8 /* Landmark.swift in Sources */,
 				D76C58042C64F12100C20C6C /* BlueRectangleThumbnail.swift in Sources */,
