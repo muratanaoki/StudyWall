@@ -33,6 +33,11 @@ struct FullScreenContentView: View {
             viewModel.selectedColor
                 .ignoresSafeArea()
 
+            Image("lock")
+                .resizable()          // 画像をリサイズ可能にする
+                .frame(maxWidth: .infinity, maxHeight: .infinity)  // 画面全体に広げる
+                .clipped()            // 画面サイズを超える部分を切り取る
+                .ignoresSafeArea()    // Safe areaを無視して表示する
             VStack(spacing: 5) {
                 TabView {
                     ForEach(0..<5, id: \.self) { _ in
@@ -95,7 +100,7 @@ struct FullScreenContentView: View {
         }
 
         if viewModel.isLocked {
-            TimeOverlayView(currentTime: viewModel.currentTime)
+            TimeOverlayView(currentTime: viewModel.currentTime,scalingFactor: scalingFactor)
             ControlIconsView()
         }
 
