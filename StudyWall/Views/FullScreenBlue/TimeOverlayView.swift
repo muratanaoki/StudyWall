@@ -24,10 +24,10 @@ struct TimeOverlayView: View {
     // 時間を表示するTextビュー
     private var timeText: some View {
         Text(formattedTimeString)
-            .font(.system(size: 108 * scalingFactor, weight: .bold))
-            .tracking(-7 * scalingFactor)
+            .font(.system(size: 108 * scalingFactor, weight: .bold, design: .rounded))
+            .tracking(-3 * scalingFactor)
             .foregroundColor(.white)
-            .padding(.bottom, 50 * scalingFactor)
+//            .padding(.bottom, 50 * scalingFactor)
     }
 
     // currentTimeをフォーマットして返すプロパティ（日時）
