@@ -3,7 +3,7 @@ import SwiftUI
 /// `FullScreenBlueView` はフルスクリーンで単語データを表示するためのビューです。
 struct FullScreenBlueView: View {
     let wordsData: [WordData]  // 表示する単語データのリスト
-    @Binding var selectedIndex: Int  // 選択されている単語のインデックス
+    @Binding var selectedIndex: Int  // 選択されている単語のインデックスを管理するバインディング
     @Binding var isFullScreen: ImageItem?  // フルスクリーン表示かどうかを管理するバインディング
     @StateObject private var viewModel = FullScreenBlueViewModel()  // ビューの状態管理を行うViewModel
 
@@ -24,7 +24,7 @@ struct FullScreenBlueView: View {
 /// `FullScreenContentView` はフルスクリーン表示の具体的なコンテンツを管理するビューです。
 struct FullScreenContentView: View {
     let wordsData: [WordData]  // 表示する単語データのリスト
-    @Binding var selectedIndex: Int  // 選択されている単語のインデックス
+    @Binding var selectedIndex: Int  // 選択されている単語のインデックスを管理するバインディング
     @Binding var isFullScreen: ImageItem?  // フルスクリーン表示かどうかを管理するバインディング
     @ObservedObject var viewModel: FullScreenBlueViewModel  // ビューの状態管理を行うViewModel
     let scalingFactor: CGFloat  // デバイスのスケーリングファクター
@@ -33,12 +33,6 @@ struct FullScreenContentView: View {
         ZStack(alignment: .topTrailing) {
             viewModel.selectedColor
                 .ignoresSafeArea()  // 背景色を全画面に適用する
-
-            Image("lock")
-                .resizable()          // 画像をリサイズ可能にする
-                .frame(maxWidth: .infinity, maxHeight: .infinity)  // 画面全体に広げる
-                .clipped()            // 画面サイズを超える部分を切り取る
-                .ignoresSafeArea()    // Safe areaを無視して表示する
 
             VStack(spacing: 5) {
                 WordSwipeView(wordsData: wordsData, scalingFactor: scalingFactor, viewModel: viewModel)
@@ -67,7 +61,7 @@ struct FullScreenContentView: View {
         // タップジェスチャーが有効な場合の透明オーバーレイ
         if viewModel.tapGestureEnabled {
             Color.clear
-                .contentShape(Rectangle())
+                .contentShape(Rectangle())  // 透明なタッチ領域を設定
                 .onTapGesture {
                     viewModel.toggleLock() // ロック状態の切り替え
                 }
@@ -75,20 +69,20 @@ struct FullScreenContentView: View {
 
         // ロック状態の時に表示するビュー
         if viewModel.isLocked {
-            TimeOverlayView(currentTime: viewModel.currentTime, scalingFactor: scalingFactor)
-            ControlIconsView(scalingFactor: scalingFactor)
+            TimeOverlayView(currentTime: viewModel.currentTime, scalingFactor: scalingFactor)  // 時間表示のオーバーレイ
+            ControlIconsView(scalingFactor: scalingFactor)  // コントロールアイコンのオーバーレイ
         }
 
         // ヘッダービューを表示する条件が満たされている場合
         if shouldShowHeaderView {
             VStack {
-                TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
-                Spacer()
+                TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)  // 上部ボタンを表示
+                Spacer()  // フレキシブルスペースを追加してレイアウトを調整
                 BottomButtonsView(
                     isLocked: $viewModel.isLocked,
                     hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
                     captureScreenshot: {
-                        viewModel.captureScreenshot()
+                        viewModel.captureScreenshot()  // スクリーンショットのキャプチャ
                     },
                     tapGestureEnabled: $viewModel.tapGestureEnabled,
                     areControlButtonsHidden: $viewModel.areControlButtonsHidden,
@@ -100,7 +94,7 @@ struct FullScreenContentView: View {
         }
     }
 
-    /// ヘッダービューを表示するかどうかの条件をチェックする関数
+    /// ヘッダービューを表示するかどうかの条件をチェックするプロパティ
     private var shouldShowHeaderView: Bool {
         !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
     }
@@ -108,29 +102,36 @@ struct FullScreenContentView: View {
 
 /// 単語をスワイプして表示するビュー
 struct WordSwipeView: View {
-    let wordsData: [WordData]
-    let scalingFactor: CGFloat
-    @ObservedObject var viewModel: FullScreenBlueViewModel
+    let wordsData: [WordData]  // 表示する単語データのリスト
+    let scalingFactor: CGFloat  // スケーリングファクター
+    @ObservedObject var viewModel: FullScreenBlueViewModel  // ビューの状態管理を行うViewModel
 
     var body: some View {
         TabView {
             ForEach(0..<5, id: \.self) { _ in
                 VStack {
                     if shouldShowHeaderView {
-                        HeaderView(scalingFactor: scalingFactor)
+                        HeaderView(scalingFactor: scalingFactor)  // ヘッダービューを表示
                     }
-                    displayWordItems()
+                    displayWordItems()  // 単語項目を表示
                 }
             }
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))  // タブビューのスタイルを設定
     }
 
     /// 単語項目を表示するためのビルダー関数
     @ViewBuilder
     private func displayWordItems() -> some View {
         ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-            if viewModel.isEyeOpen {
+            wordItemView(for: index, isEyeOpen: viewModel.isEyeOpen)
+        }
+    }
+
+    /// 単語アイテムビューを表示するための関数
+    private func wordItemView(for index: Int, isEyeOpen: Bool) -> some View {
+        Group {
+            if isEyeOpen {
                 WordItemView(
                     wordData: wordsData[index],
                     speechSynthesizer: viewModel.speechSynthesizer,
@@ -148,12 +149,13 @@ struct WordSwipeView: View {
         }
     }
 
-    /// ヘッダービューを表示するかどうかの条件をチェックする関数
+    /// ヘッダービューを表示するかどうかの条件をチェックするプロパティ
     private var shouldShowHeaderView: Bool {
         !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
     }
 }
 
+/// プレビュー用の構造体。iPhone 12デバイスでのプレビューを提供。
 struct FullScreenBlueView_Previews: PreviewProvider {
     @State static var selectedIndex = 0
     @State static var isFullScreen: ImageItem? = nil
