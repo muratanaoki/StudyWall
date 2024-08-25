@@ -5,11 +5,11 @@ struct TimeOverlayView: View {
     let scalingFactor: CGFloat
 
     var body: some View {
-        VStack(spacing: -13 * scalingFactor) { // VStackの間隔を設定
+        VStack(spacing: -13 * scalingFactor) {
             dateText
             timeText
         }
-        .frame(maxWidth: .infinity, alignment: .center)
+        .frame(maxWidth: .infinity)
         .padding(.top, 10 * scalingFactor)
     }
 
@@ -18,7 +18,6 @@ struct TimeOverlayView: View {
         Text(formattedDateString)
             .font(.system(size: 22 * scalingFactor))
             .foregroundColor(.white)
-            .padding(.top, 6 * scalingFactor)
     }
 
     // 時間を表示するTextビュー
@@ -27,7 +26,6 @@ struct TimeOverlayView: View {
             .font(.system(size: 108 * scalingFactor, weight: .bold, design: .rounded))
             .tracking(-3 * scalingFactor)
             .foregroundColor(.white)
-//            .padding(.bottom, 50 * scalingFactor)
     }
 
     // currentTimeをフォーマットして返すプロパティ（日時）

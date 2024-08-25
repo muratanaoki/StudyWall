@@ -11,7 +11,7 @@ class FullScreenBlueViewModel: ObservableObject {
     @Published var showControlButtons: Bool = false // コントロールボタンを表示するかどうかの状態を管理
     @Published var tapGestureEnabled: Bool = false // タップジェスチャーが有効かどうかの状態を管理
     @Published var hideButtonsForScreenshot: Bool = false // スクリーンショット時にボタンを隠すかどうかの状態を管理
-    @Published var areControlButtonsHidden: Bool = false // コントロールボタンが非表示かどうかの状態を管理
+    @Published var isScreenShot: Bool = false // コントロールボタンが非表示かどうかの状態を管理
     @Published var showColorPicker: Bool = false // カラーピッカーを表示するかどうかの状態を管理
     @Published var selectedColor: Color = .blue // 選択された色を保持
     @Published var isEyeOpen: Bool = true // アイコンの状態を管理
@@ -48,10 +48,10 @@ class FullScreenBlueViewModel: ObservableObject {
      - ボタンを一時的に隠し、スクリーンショットをキャプチャしてから再度表示する。
      */
     func captureScreenshot() {
-        areControlButtonsHidden = true // スクリーンショットの前にボタンを隠す
+        isScreenShot = true // スクリーンショットの前にボタンを隠す
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.createScreenshot { screenshot in
-                self.areControlButtonsHidden = false // スクリーンショット後にボタンを表示する
+                self.isScreenShot = false // スクリーンショット後にボタンを表示する
                 if let screenshot = screenshot {
                     self.saveImageToPhotos(screenshot) // スクリーンショットをフォトライブラリに保存
                 }
@@ -88,7 +88,6 @@ class FullScreenBlueViewModel: ObservableObject {
     func toggleLock() {
         withAnimation {
             isLocked.toggle() // ロック状態を切り替える
-            areControlButtonsHidden = isLocked // ロック状態に応じてコントロールボタンを表示/非表示
             tapGestureEnabled = isLocked // ロック状態に応じてタップジェスチャーを有効/無効
         }
     }

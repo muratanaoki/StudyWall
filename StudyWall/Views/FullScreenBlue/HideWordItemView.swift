@@ -4,7 +4,6 @@ import AVFoundation
 struct HideWordItemView: View {
     let wordData: WordData
     let speechSynthesizer: AVSpeechSynthesizer
-    @Binding var areControlButtonsHidden: Bool
     @State private var isChecked: Bool = false
     let scalingFactor: CGFloat //
 
@@ -24,18 +23,17 @@ struct HideWordItemView: View {
         HStack {
             Text(wordData.word)
                 .font(.subheadline)
-            if !areControlButtonsHidden {
-                speakerButton(for: wordData.word)
-            }
+
+            speakerButton(for: wordData.word)
+
             Text(wordData.pronunciation)
                 .font(.caption2)
                 .foregroundColor(.gray)
             Spacer()
-            if !areControlButtonsHidden {
-                Toggle("", isOn: $isChecked)
-                    .toggleStyle(CheckboxStyle(scalingFactor: scalingFactor))
-                    .labelsHidden()
-            }
+
+            Toggle("", isOn: $isChecked)
+                .toggleStyle(CheckboxStyle(scalingFactor: scalingFactor))
+                .labelsHidden()
         }
         .padding(.bottom, 3)
     }
@@ -45,9 +43,9 @@ struct HideWordItemView: View {
         ForEach(wordData.sentences) { sentence in
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
-                    if !areControlButtonsHidden {
-                        speakerButton(for: sentence.english)
-                    }
+
+                    speakerButton(for: sentence.english)
+
                     Text(sentence.english)
                         .font(.caption)
                 }

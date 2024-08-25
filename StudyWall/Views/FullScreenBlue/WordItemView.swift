@@ -4,11 +4,10 @@ import AVFoundation
 struct WordItemView: View {
     let wordData: WordData
     let speechSynthesizer: AVSpeechSynthesizer
-    @Binding var areControlButtonsHidden: Bool
     let scalingFactor: CGFloat
-
+    
     @State private var isChecked: Bool = false  // チェックボックスの状態を管理するための状態変数
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4 * scalingFactor) {
             headerView
@@ -22,15 +21,15 @@ struct WordItemView: View {
         .shadow(radius: 5 * scalingFactor) // スケーリングに対応
         .padding(.horizontal, 8 * scalingFactor) // スケーリングに対応
     }
-
+    
     // ヘッダー部分を分離
     private var headerView: some View {
         HStack {
             Text(wordData.word)
                 .font(.system(size: 12 * scalingFactor)) // スケーリングに対応
-            if !areControlButtonsHidden {
-                speakerButton(for: wordData.word)
-            }
+            
+            speakerButton(for: wordData.word)
+            
             Text(wordData.pronunciation)
                 .font(.system(size: 12 * scalingFactor)) // スケーリングに対応
                 .foregroundColor(.gray)
@@ -38,23 +37,22 @@ struct WordItemView: View {
                 .font(.system(size: 12 * scalingFactor)) // スケーリングに対応
                 .foregroundColor(.gray)
             Spacer()
-            if !areControlButtonsHidden {
-                Toggle("", isOn: $isChecked)
-                    .toggleStyle(CheckboxStyle(scalingFactor: scalingFactor))
-                    .labelsHidden()
-            }
+            
+            Toggle("", isOn: $isChecked)
+                .toggleStyle(CheckboxStyle(scalingFactor: scalingFactor))
+                .labelsHidden()
         }
         .padding(.bottom, 3 * scalingFactor) // スケーリングに対応
     }
-
+    
     // 文章部分を分離
     private var sentencesView: some View {
         ForEach(wordData.sentences) { sentence in
             VStack(alignment: .leading, spacing: 2 * scalingFactor) { // スケーリングに対応
                 HStack {
-                    if !areControlButtonsHidden {
-                        speakerButton(for: sentence.english)
-                    }
+                    
+                    speakerButton(for: sentence.english)
+                    
                     Text(sentence.english)
                         .font(.system(size: 12 * scalingFactor)) // スケーリングに対応
                 }
@@ -64,7 +62,7 @@ struct WordItemView: View {
             }
         }
     }
-
+    
     // スピーカーボタンの共通化
     private func speakerButton(for text: String) -> some View {
         Button(action: {

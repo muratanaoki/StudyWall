@@ -34,124 +34,174 @@ struct FullScreenContentView: View {
             viewModel.selectedColor
                 .ignoresSafeArea()  // 背景色を全画面に適用する
 
-            VStack(spacing: 5) {
-                WordSwipeView(wordsData: wordsData, scalingFactor: scalingFactor, viewModel: viewModel)
-            }
-            .frame(maxHeight: .infinity)
-            .alert(isPresented: $viewModel.alertData.isPresented) {
-                // アラートの表示
-                Alert(
-                    title: Text(viewModel.alertData.title),
-                    message: Text(viewModel.alertData.message),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-
-            // オーバーレイビューを表示
-            overlayViews(scalingFactor: scalingFactor)
+            overlayContent(scalingFactor: scalingFactor)
         }
         .onAppear {
             viewModel.startClock()  // ビューが表示されたときにクロックを開始
         }
     }
 
-    /// オーバーレイビューを表示するためのビルダー関数
+    /// オーバーレイコンテンツを条件に基づいて表示する関数
     @ViewBuilder
-    private func overlayViews(scalingFactor: CGFloat) -> some View {
-        // タップジェスチャーが有効な場合の透明オーバーレイ
+    private func overlayContent(scalingFactor: CGFloat) -> some View {
+
+        if viewModel.isScreenShot {
+            screenView(scalingFactor: scalingFactor)
+        } else if viewModel.isLocked {
+            lockedView(scalingFactor: scalingFactor)
+        } else if viewModel.isEyeOpen {
+            unlockedViewEyeOpen(scalingFactor: scalingFactor)
+        } else {
+            unlockedViewEyeClosed(scalingFactor: scalingFactor)
+        }
+
         if viewModel.tapGestureEnabled {
-            Color.clear
-                .contentShape(Rectangle())  // 透明なタッチ領域を設定
-                .onTapGesture {
-                    viewModel.toggleLock() // ロック状態の切り替え
-                }
+            lockToggleOverlay()
         }
+    }
 
-        // ロック状態の時に表示するビュー
-        if viewModel.isLocked {
-            TimeOverlayView(currentTime: viewModel.currentTime, scalingFactor: scalingFactor)  // 時間表示のオーバーレイ
-            ControlIconsView(scalingFactor: scalingFactor)  // コントロールアイコンのオーバーレイ
-        }
 
-        // ヘッダービューを表示する条件が満たされている場合
-        if shouldShowHeaderView {
-            VStack {
-                TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)  // 上部ボタンを表示
-                Spacer()  // フレキシブルスペースを追加してレイアウトを調整
-                BottomButtonsView(
-                    isLocked: $viewModel.isLocked,
-                    hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
-                    captureScreenshot: {
-                        viewModel.captureScreenshot()  // スクリーンショットのキャプチャ
-                    },
-                    tapGestureEnabled: $viewModel.tapGestureEnabled,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    selectedColor: $viewModel.selectedColor,
-                    viewModel: viewModel,
-                    scalingFactor: scalingFactor
-                )
+    /// ロックされた状態のビューを表示する関数
+    private func screenView(scalingFactor: CGFloat) -> some View {
+        VStack(spacing: 10) {
+            ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                ScreenShotWordItemView(wordData: wordsData[index], scalingFactor: scalingFactor)
             }
         }
     }
 
-    /// ヘッダービューを表示するかどうかの条件をチェックするプロパティ
-    private var shouldShowHeaderView: Bool {
-        !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
+    /// ロックされた状態のビューを表示する関数
+    private func lockedView(scalingFactor: CGFloat) -> some View {
+        VStack(spacing: 10) {
+            TimeOverlayView(currentTime: viewModel.currentTime, scalingFactor: scalingFactor)
+            ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+                ScreenShotWordItemView(wordData: wordsData[index], scalingFactor: scalingFactor)
+            }
+            ControlIconsView(scalingFactor: scalingFactor)
+        }
+    }
+
+    /// ロック解除された状態で目が開いている状態のビューを表示する関数
+    private func unlockedViewEyeOpen(scalingFactor: CGFloat) -> some View {
+        VStack {
+            TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
+            HeaderView(scalingFactor: scalingFactor)
+            WordSwipeView(wordsData: wordsData, scalingFactor: scalingFactor, viewModel: viewModel)
+                .frame(maxHeight: .infinity)
+                .alert(isPresented: $viewModel.alertData.isPresented) {
+                    Alert(
+                        title: Text(viewModel.alertData.title),
+                        message: Text(viewModel.alertData.message),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+            BottomButtonsView(
+                isLocked: $viewModel.isLocked,
+                hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                captureScreenshot: {
+                    viewModel.captureScreenshot()
+                },
+                tapGestureEnabled: $viewModel.tapGestureEnabled,
+                selectedColor: $viewModel.selectedColor,
+                viewModel: viewModel,
+                scalingFactor: scalingFactor
+            )
+        }
+    }
+
+    /// ロック解除された状態で目が閉じている状態のビューを表示する関数
+    private func unlockedViewEyeClosed(scalingFactor: CGFloat) -> some View {
+        VStack() {
+            TopButtonsView(isFullScreen: $isFullScreen, scalingFactor: scalingFactor)
+            HeaderView(scalingFactor: scalingFactor)
+            HideWordSwipeView(wordsData: wordsData, scalingFactor: scalingFactor, viewModel: viewModel)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .alert(isPresented: $viewModel.alertData.isPresented) {
+                    Alert(
+                        title: Text(viewModel.alertData.title),
+                        message: Text(viewModel.alertData.message),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+            BottomButtonsView(
+                isLocked: $viewModel.isLocked,
+                hideButtonsForScreenshot: $viewModel.hideButtonsForScreenshot,
+                captureScreenshot: {
+                    viewModel.captureScreenshot()
+                },
+                tapGestureEnabled: $viewModel.tapGestureEnabled,
+                selectedColor: $viewModel.selectedColor,
+                viewModel: viewModel,
+                scalingFactor: scalingFactor
+            )
+        }
+    }
+
+    /// ロックのトグル用オーバーレイを表示する関数
+    private func lockToggleOverlay() -> some View {
+        Color.clear
+            .contentShape(Rectangle())
+            .onTapGesture { viewModel.toggleLock() }
     }
 }
 
 /// 単語をスワイプして表示するビュー
 struct WordSwipeView: View {
-    let wordsData: [WordData]  // 表示する単語データのリスト
-    let scalingFactor: CGFloat  // スケーリングファクター
-    @ObservedObject var viewModel: FullScreenBlueViewModel  // ビューの状態管理を行うViewModel
+    let wordsData: [WordData]
+    let scalingFactor: CGFloat
+    @ObservedObject var viewModel: FullScreenBlueViewModel
 
     var body: some View {
         TabView {
             ForEach(0..<5, id: \.self) { _ in
                 VStack {
-                    if shouldShowHeaderView {
-                        HeaderView(scalingFactor: scalingFactor)  // ヘッダービューを表示
-                    }
-                    displayWordItems()  // 単語項目を表示
+                    displayWordItems()
+                    Spacer()
                 }
             }
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))  // タブビューのスタイルを設定
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
 
-    /// 単語項目を表示するためのビルダー関数
     @ViewBuilder
     private func displayWordItems() -> some View {
         ForEach(0..<min(5, wordsData.count), id: \.self) { index in
-            wordItemView(for: index, isEyeOpen: viewModel.isEyeOpen)
+            WordItemView(
+                wordData: wordsData[index],
+                speechSynthesizer: viewModel.speechSynthesizer,
+
+                scalingFactor: scalingFactor
+            )
         }
     }
+}
 
-    /// 単語アイテムビューを表示するための関数
-    private func wordItemView(for index: Int, isEyeOpen: Bool) -> some View {
-        Group {
-            if isEyeOpen {
-                WordItemView(
-                    wordData: wordsData[index],
-                    speechSynthesizer: viewModel.speechSynthesizer,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    scalingFactor: scalingFactor
-                )
-            } else {
-                HideWordItemView(
-                    wordData: wordsData[index],
-                    speechSynthesizer: viewModel.speechSynthesizer,
-                    areControlButtonsHidden: $viewModel.areControlButtonsHidden,
-                    scalingFactor: scalingFactor
-                )
+/// 隠された単語をスワイプして表示するビュー
+struct HideWordSwipeView: View {
+    let wordsData: [WordData]
+    let scalingFactor: CGFloat
+    @ObservedObject var viewModel: FullScreenBlueViewModel
+
+    var body: some View {
+        TabView {
+            ForEach(0..<5, id: \.self) { _ in
+                VStack { displayWordItems()
+                    Spacer()
+                }
             }
         }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
 
-    /// ヘッダービューを表示するかどうかの条件をチェックするプロパティ
-    private var shouldShowHeaderView: Bool {
-        !viewModel.isLocked && !viewModel.hideButtonsForScreenshot && !viewModel.areControlButtonsHidden
+    @ViewBuilder
+    private func displayWordItems() -> some View {
+        ForEach(0..<min(5, wordsData.count), id: \.self) { index in
+            HideWordItemView(
+                wordData: wordsData[index],
+                speechSynthesizer: viewModel.speechSynthesizer,
+                scalingFactor: scalingFactor
+            )
+        }
     }
 }
 
@@ -171,14 +221,14 @@ struct FullScreenBlueView_Previews: PreviewProvider {
             ]
         )
 
-        let wordsData = Array(repeating: sampleWordData, count: 5) // 同じデータを5回繰り返し
+        let wordsData = Array(repeating: sampleWordData, count: 5)
 
         return FullScreenBlueView(
             wordsData: wordsData,
             selectedIndex: $selectedIndex,
             isFullScreen: $isFullScreen
         )
-        .previewDevice("iPhone 12") // iPhone 12でのプレビュー
+        .previewDevice("iPhone 12")
         .previewDisplayName("Full Screen Blue View with 5 WordData")
     }
 }

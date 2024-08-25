@@ -1,11 +1,9 @@
 import SwiftUI
 import AVFoundation
 
-struct WordItemViewTest: View {
+struct ScreenShotWordItemView: View {
     let wordData: WordData
     let scalingFactor: CGFloat
-
-    @State private var isChecked: Bool = false  // チェックボックスの状態を管理するための状態変数
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4 * scalingFactor) {
