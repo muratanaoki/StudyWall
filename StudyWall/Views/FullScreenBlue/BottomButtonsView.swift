@@ -11,9 +11,18 @@ struct BottomButtonsView: View {
 
     let scalingFactor: CGFloat
 
+    @Binding var showSettingsSheet: Bool  // シート表示状態をバインド
+
     var body: some View {
         VStack {
             HStack {
+
+                controlButton(iconName: "gearshape") {
+                    showSettingsSheet = true
+                }
+
+                Spacer()
+
                 controlButton(iconName: "lock.iphone") {
                     isLocked = true
                     tapGestureEnabled = true

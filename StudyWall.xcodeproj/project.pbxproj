@@ -23,6 +23,8 @@
 		D737C4502C67A26C006782BD /* ControlIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C44F2C67A26C006782BD /* ControlIconsView.swift */; };
 		D737C4522C67A285006782BD /* TopButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4512C67A285006782BD /* TopButtonsView.swift */; };
 		D737C4552C67A369006782BD /* AlertData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737C4542C67A369006782BD /* AlertData.swift */; };
+		D738FFAF2C9AF490001ADA65 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D738FFAE2C9AF490001ADA65 /* SettingsView.swift */; };
+		D738FFB12C9EA2B0001ADA65 /* LockScreenRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D738FFB02C9EA2B0001ADA65 /* LockScreenRectangle.swift */; };
 		D76C58002C5F965800C20C6C /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = D76C57FF2C5F965800C20C6C /* english.json */; };
 		D76C58022C5F9CC900C20C6C /* utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58012C5F9CC900C20C6C /* utilities.swift */; };
 		D76C58042C64F12100C20C6C /* BlueRectangleThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C58032C64F12100C20C6C /* BlueRectangleThumbnail.swift */; };
@@ -78,6 +80,8 @@
 		D737C44F2C67A26C006782BD /* ControlIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlIconsView.swift; sourceTree = "<group>"; };
 		D737C4512C67A285006782BD /* TopButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopButtonsView.swift; sourceTree = "<group>"; };
 		D737C4542C67A369006782BD /* AlertData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertData.swift; sourceTree = "<group>"; };
+		D738FFAE2C9AF490001ADA65 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D738FFB02C9EA2B0001ADA65 /* LockScreenRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenRectangle.swift; sourceTree = "<group>"; };
 		D76C57FF2C5F965800C20C6C /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		D76C58012C5F9CC900C20C6C /* utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utilities.swift; sourceTree = "<group>"; };
 		D76C58032C64F12100C20C6C /* BlueRectangleThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueRectangleThumbnail.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 				D722C5A12C6E1BB700211062 /* HeaderView.swift */,
 				D722C5A52C6F6EA100211062 /* HideWordItemView.swift */,
 				D7975BC12C7AD6BA00C1B636 /* ScreenShotWordItemView.swift */,
+				D738FFAE2C9AF490001ADA65 /* SettingsView.swift */,
+				D738FFB02C9EA2B0001ADA65 /* LockScreenRectangle.swift */,
 			);
 			path = FullScreenBlue;
 			sourceTree = "<group>";
@@ -405,6 +411,7 @@
 				D7975BC22C7AD6BA00C1B636 /* ScreenShotWordItemView.swift in Sources */,
 				D7CE93422C5B999D00063DE8 /* FavoriteButton.swift in Sources */,
 				D7CE93592C5B9D9E00063DE8 /* CategoryRow.swift in Sources */,
+				D738FFAF2C9AF490001ADA65 /* SettingsView.swift in Sources */,
 				D7CE93412C5B999D00063DE8 /* CircleImage.swift in Sources */,
 				D737C4502C67A26C006782BD /* ControlIconsView.swift in Sources */,
 				D7CE93272C5A56BB00063DE8 /* Profile.swift in Sources */,
@@ -435,6 +442,7 @@
 				D7CE93122C5A49E600063DE8 /* Home.swift in Sources */,
 				D7CE93392C5B968C00063DE8 /* ProfileSummary.swift in Sources */,
 				D7CE93262C5A56BB00063DE8 /* Landmark.swift in Sources */,
+				D738FFB12C9EA2B0001ADA65 /* LockScreenRectangle.swift in Sources */,
 				D76C58042C64F12100C20C6C /* BlueRectangleThumbnail.swift in Sources */,
 				D7CE93542C5B99B700063DE8 /* HexagonParameters.swift in Sources */,
 				D7CE93612C5B9E1100063DE8 /* LandmarkDetail.swift in Sources */,

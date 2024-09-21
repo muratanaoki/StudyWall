@@ -29,6 +29,10 @@ struct FullScreenContentView: View {
     @ObservedObject var viewModel: FullScreenBlueViewModel  // ビューの状態管理を行うViewModel
     let scalingFactor: CGFloat  // デバイスのスケーリングファクター
 
+
+    @State private var showSettingsSheet = false
+
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             viewModel.selectedColor
@@ -39,6 +43,10 @@ struct FullScreenContentView: View {
         .onAppear {
             viewModel.startClock()  // ビューが表示されたときにクロックを開始
         }
+        // シートを表示するための修飾子を追加
+            .sheet(isPresented: $showSettingsSheet) {
+                SettingsView()
+            }
     }
 
     /// オーバーレイコンテンツを条件に基づいて表示する関数
@@ -104,7 +112,8 @@ struct FullScreenContentView: View {
                 tapGestureEnabled: $viewModel.tapGestureEnabled,
                 selectedColor: $viewModel.selectedColor,
                 viewModel: viewModel,
-                scalingFactor: scalingFactor
+                scalingFactor: scalingFactor,
+                showSettingsSheet:$showSettingsSheet
             )
         }
     }
@@ -132,7 +141,8 @@ struct FullScreenContentView: View {
                 tapGestureEnabled: $viewModel.tapGestureEnabled,
                 selectedColor: $viewModel.selectedColor,
                 viewModel: viewModel,
-                scalingFactor: scalingFactor
+                scalingFactor: scalingFactor,
+                showSettingsSheet:$showSettingsSheet
             )
         }
     }
